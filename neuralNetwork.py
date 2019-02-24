@@ -4,22 +4,31 @@ class NeuralNetwork:
 	# layersAmmount = 0
 	layersInfo = 0
 	layers = []
+	imgList = []
 
-	def __init__(self, layers):
+	def __init__(self, layers, inImgList = None):
 		# self.layersAmmount = len(layers)
 		self.layersInfo = layers
+		self.imgList = inImgList
 		print("Network: ", self.layersInfo, "\n")
 
-		for x in self.layersInfo:
-			self.__createLayer(x)
+		for x in range(len(self.layersInfo)):
+			flag = False
+			if x == 0 and self.imgList is not None and len(self.imgList) == self.layersInfo[0]:
+				flag = True
+			self.__createLayer(self.layersInfo[x])
 
 		self.__createSynapses()
 
-	def __createLayer(self, layerSize):
+	def __createLayer(self, layerSize, flag = False):
 		arrLayer = []
 		for i in range(layerSize):  # create all neurones for layer
-			arrLayer.append(neuron.Neuron(len(self.layers)))  # leyer's number beginning from 0
-
+			if flag == True:
+				arrLayer.append(neuron.Neuron(len(self.layers), self.imgList[i]))  # load img to 0 layer
+				print("suka", self.imgList[i])
+			else:
+				arrLayer.append(neuron.Neuron(len(self.layers)))  # leyer's number beginning from 0
+		# print(self.imgList)
 		self.layers.append(arrLayer)  # add layer
 
 	def __createSynapses(self):
