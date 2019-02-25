@@ -25,8 +25,8 @@ class Neuron:
 
 		if self.synapsesList[0] is not None:  # layer 0 (because of: self.layers[currentLayer][neuron].synapses( [None] ) in neuralNetwork.py)
 			for x in range(len(self.synapsesList)):
-				# self.weightList.append( random.uniform(0, 1) )  # random weight
-				self.weightList.append( self.activation(random.uniform(0, 1)) )  # random activated weight
+				self.weightList.append( random.uniform(-1, 1) )  # random weight
+				# self.weightList.append( self.activation(random.uniform(0, 1)) )  # random activated weight (-1, 1) to solve neuron value > 1 
 
 		# print("synapsesList[", self.numb, ']:', self.synapsesList)
 		# print("weightList[", self.numb, ']:', self.weightList)
