@@ -5,7 +5,7 @@ class Neuron:
 	
 	genAmmount = 0
 	layer = 0
-	value = 0  # value 0-1 (only for 1 layer) 
+	value = -1  # value 0-1 is taken from an img (if exist)
 	numb = 0
 	synapsesList = None
 	weightList = None
@@ -43,16 +43,18 @@ class Neuron:
 		# 	print(self.synapsesList[0].value)
 		if self.synapsesList[0] is None:  # layer 0 (because of: self.layers[currentLayer][neuron].synapses( [None] ) in neuralNetwork.py)
 		# init weights with random values
-			if self.value == 0:  # else image was loaded (no need to init with random)
-				self.value = random.uniform(0, 1)  # change to random (activate???)
-		else:
+			if self.value == -1:  # else image was loaded (no need to init with random)
+				# self.value = self.activation(random.uniform(0, 1))  # activated
+				self.value = random.uniform(0, 1)  # not activated
+		else:  # any layer exept 0 layer
+			self.value += 1  # default val == -1
 			# for neuronInstance in self.synapsesList:
 			for neuron in range(len(self.synapsesList)):
 				self.value += self.synapsesList[neuron].value * self.weightList[neuron]
-				# print("value: ", self.synapsesList[neuron].value)  # why???
-		print(self.value)
+
+		print("value[", self.numb, ']:', self.value)
 		self.value = self.activation(self.value)
-		# print(self.value)
+		print("activated val [", self.numb, "]:", self.value)
 
 	@staticmethod
 	def howMany(silent = False):

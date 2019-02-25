@@ -16,16 +16,16 @@ class NeuralNetwork:
 			flag = False
 			if x == 0 and self.imgList is not None and len(self.imgList) == self.layersInfo[0]:
 				flag = True
-			self.__createLayer(self.layersInfo[x])
+			self.__createLayer(self.layersInfo[x], flag)
 
 		self.__createSynapses()
 
-	def __createLayer(self, layerSize, flag = False):
+	def __createLayer(self, layerSize, flag = False):  # flag - create 0 layer with img values 
 		arrLayer = []
 		for i in range(layerSize):  # create all neurones for layer
 			if flag == True:
 				arrLayer.append(neuron.Neuron(len(self.layers), self.imgList[i]))  # load img to 0 layer
-				print("suka", self.imgList[i])
+				# print("imgData:", self.imgList[i])
 			else:
 				arrLayer.append(neuron.Neuron(len(self.layers)))  # leyer's number beginning from 0
 		# print(self.imgList)

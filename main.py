@@ -9,10 +9,10 @@ img = cv2.imread('letters/a_1.png',0)
 pixels = []
 for n in range(len(img)):
 	for m in range(len(img[n])):
-		tmp = int(img[n, m])
-		if tmp == 0:
-			tmp = 1  # fix 0 is not innited (in neuron.py)
-		pixels.append(int(img[n, m]))  # pos n/m check, white - 255, blk - 0
+		tmp = (255 - int(img[n, m]))/255  # invert colour
+		# if tmp == 0:
+		# 	tmp = 1  # fix 0 is not innited (in neuron.py)
+		pixels.append(tmp)  # pos n/m check, white - 255, blk - 0
 # pixeles.append()
 # print(len(img)*len(img[0]))
 # print(pixels)
@@ -21,9 +21,9 @@ Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  
 
 # Network.showAllNeurones()  # all neurones showe some info about eachselves
 
-for i in Network.layers:  # acces to every neurone
-	for n in i:
-		n.info()
+# for i in Network.layers:  # acces to every neurone
+# 	for n in i:
+# 		n.info()
 		# print(n.layer)
 
 # print(Network.layers[1].layer)
