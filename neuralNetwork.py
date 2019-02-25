@@ -1,16 +1,19 @@
 import neuron
 
 class NeuralNetwork:
-	# layersAmmount = 0
+	genAmmount = 0
+	numb = 0
 	layersInfo = 0
 	layers = []
 	imgList = []
 
 	def __init__(self, layers, inImgList = None):
+		NeuralNetwork.genAmmount += 1
+		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		# self.layersAmmount = len(layers)
 		self.layersInfo = layers
 		self.imgList = inImgList
-		print("Network: ", self.layersInfo, "\n")
+		print("Network [", self.numb, "]:", self.layersInfo, "\n")
 
 		for x in range(len(self.layersInfo)):
 			flag = False
@@ -32,15 +35,8 @@ class NeuralNetwork:
 		self.layers.append(arrLayer)  # add layer
 
 	def __createSynapses(self):
-		# currentLayer = 0
-		
-		# if currentLayer > 0:
-		# 	self.layers[currentLayer][0].synapses( self.layers[currentLayer - 1] )  # send all previous layer to neurone
-
-		# print(self.layers[currentLayer - 1])
 		for currentLayer in range(len(self.layersInfo)):
 			# print(currentLayer)
-			
 			for neuron in range(len(self.layers[currentLayer])):
 				if currentLayer == 0:
 					self.layers[currentLayer][neuron].synapses( [None] )  # first layer
@@ -49,13 +45,22 @@ class NeuralNetwork:
 
 				self.layers[currentLayer][neuron].countValue()
 			# print(neuron)
-		
 		# self.layers[currentLayer][0].info()  # neurone for synapse func()
 
 	def showAllNeurones(self):
 		for n in self.layers:
 			for m in n:
 				m.info()
+
+	def showOutputNeurones(self):
+		for neuronInstance in self.layers[len(self.layersInfo) - 1]:  # show last layer
+			neuronInstance.info()
+
+	@staticmethod
+	def howMany(silent = False):
+		if not silent:
+			print('NeuralNetwork\'s ammount {0:d}.'.format(NeuralNetwork.genAmmount))
+		return NeuralNetwork.genAmmount
 
 # N = neuron.Neuron()
 # N1 = neuron.Neuron()

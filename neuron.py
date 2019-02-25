@@ -15,28 +15,21 @@ class Neuron:
 		self.layer = layer
 		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		self.value = inputD
-		# print("Hello, I'm ", self.numb)
 
 	def activation(self, x):
 		return 1 / (1 + math.exp(-1 * x))
 
 	def synapses(self, neuronesList):  # neuronesList = [[*pointer_1, weight_1], [*pointer_2, weight_2], ...]
 		self.synapsesList = neuronesList
-
-		# print("Hello I'm the oldest on this layer!")
-		# neuronesList[0].info()
-		# print("Len:", len(neuronesList))
-
-		# take a picture data
-		# if self.layer == 0:  # init weights with random values
-		# 	self.value = 0.11  # change to random (activate???)
 		self.weightList = []
-		for x in range(len(self.synapsesList)):
-			# self.weightList.append( random.uniform(0, 1) )  # random weight
-			self.weightList.append( self.activation(random.uniform(0, 1)) )  # random activated weight
 
-		# print(self.synapsesList)
-		# print(self.weightList)
+		if self.synapsesList[0] is not None:  # layer 0 (because of: self.layers[currentLayer][neuron].synapses( [None] ) in neuralNetwork.py)
+			for x in range(len(self.synapsesList)):
+				# self.weightList.append( random.uniform(0, 1) )  # random weight
+				self.weightList.append( self.activation(random.uniform(0, 1)) )  # random activated weight
+
+		# print("synapsesList[", self.numb, ']:', self.synapsesList)
+		# print("weightList[", self.numb, ']:', self.weightList)
 
 	def countValue(self):
 		# if self.synapsesList[0] is not None:
@@ -45,16 +38,19 @@ class Neuron:
 		# init weights with random values
 			if self.value == -1:  # else image was loaded (no need to init with random)
 				# self.value = self.activation(random.uniform(0, 1))  # activated
+				# print("wtf?")
 				self.value = random.uniform(0, 1)  # not activated
 		else:  # any layer exept 0 layer
-			self.value += 1  # default val == -1
+			self.value = 0  # default val == -1
+			# print("val_before:", self.value)
 			# for neuronInstance in self.synapsesList:
 			for neuron in range(len(self.synapsesList)):
 				self.value += self.synapsesList[neuron].value * self.weightList[neuron]
+				# print("try:", self.synapsesList[neuron].value * self.weightList[neuron])
 
 		print("value[", self.numb, ']:', self.value)
 		self.value = self.activation(self.value)
-		print("activated val [", self.numb, "]:", self.value)
+		# print("activated val [", self.numb, "]:", self.value)
 
 	@staticmethod
 	def howMany(silent = False):
@@ -65,8 +61,5 @@ class Neuron:
 	def info(self):
 		print("Hello, I'm #", self.numb)
 		print("come to you from layer #", self.layer)
-		print("value:", self.value)
+		print("value[", self.numb, ']:', self.value)
 		print("\n")
-
-	# def showValue(self):
-	# 	print(self.value)

@@ -4,20 +4,21 @@ import numpy as np
 import neuralNetwork
 
 img = cv2.imread('letters/a_1.png',0)
-# pixel = int(img[8, 5])
-# print(pixel)
 pixels = []
 for n in range(len(img)):
 	for m in range(len(img[n])):
-		tmp = (255 - int(img[n, m]))/255  # invert colour
-		# if tmp == 0:
-		# 	tmp = 1  # fix 0 is not innited (in neuron.py)
-		pixels.append(tmp)  # pos n/m check, white - 255, blk - 0
-# pixeles.append()
-# print(len(img)*len(img[0]))
+		tmp = (255 - int(img[n, m]))/255  # get pixel color val and invert colour (default: white - 255, blk - 0)
+		pixels.append(tmp)  # pos n/m check, 
+# print(len(img)*len(img[0]))  # total img pixels ammount
 # print(pixels)
 # Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4])  # [256, 64, 4]
-Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  send img
+
+NetworkList = []
+for i in range(8):
+	# Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  send img
+	Network = neuralNetwork.NeuralNetwork([4, 2])  # [256, 64, 4]  send img
+	# Network.showOutputNeurones()
+	NetworkList.append(Network)
 
 # Network.showAllNeurones()  # all neurones showe some info about eachselves
 
