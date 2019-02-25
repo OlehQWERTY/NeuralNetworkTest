@@ -15,9 +15,9 @@ for n in range(len(img)):
 
 NetworkList = []
 for i in range(8):
-	# Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  send img
-	Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5])  # [256, 64, 4]  send img
-	# Network.showOutputNeurones()
+	Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  send img
+	# Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5])  # [256, 64, 4]  send img
+	Network.showOutputNeurones()
 	NetworkList.append(Network)
 
 # Network.showAllNeurones()  # all neurones showe some info about eachselves

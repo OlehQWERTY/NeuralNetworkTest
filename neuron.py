@@ -48,7 +48,7 @@ class Neuron:
 				self.value += self.synapsesList[neuron].value * self.weightList[neuron]
 				# print("try:", self.synapsesList[neuron].value * self.weightList[neuron])
 
-		print("value[", self.numb, ']:', self.value)
+		# print("value[", self.numb, ']:', self.value)
 		self.value = self.activation(self.value)
 		# print("activated val [", self.numb, "]:", self.value)
 
