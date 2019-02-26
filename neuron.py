@@ -34,7 +34,7 @@ class Neuron:
 	def countValue(self):
 		# if self.synapsesList[0] is not None:
 		# 	print(self.synapsesList[0].value)
-		if self.synapsesList[0] is None:  # layer 0 (because of: self.layers[currentLayer][neuron].synapses( [None] ) in neuralNetwork.py)
+		if self.synapsesList[0] is None and self.layer == 0:  # layer 0 (because of: self.layers[currentLayer][neuron].synapses( [None] ) in neuralNetwork.py)
 		# init weights with random values
 			if self.value == -1:  # else image was loaded (no need to init with random)
 				# self.value = self.activation(random.uniform(0, 1))  # activated
