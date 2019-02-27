@@ -9,12 +9,14 @@ class Neuron:
 	numb = 0
 	synapsesList = None
 	weightList = None
+	iterationOfCreation = None  # test for bugfix
 
-	def __init__(self, layer = 0, inputD = 0):
+	def __init__(self, layer = 0, inputD = 0, iterationOfCreation = None):
 		Neuron.genAmmount += 1
 		self.layer = layer
 		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		self.value = inputD
+		self.iterationOfCreation = iterationOfCreation
 
 	def activation(self, x):
 		return 1 / (1 + math.exp(-1 * x))

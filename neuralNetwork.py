@@ -7,13 +7,15 @@ class NeuralNetwork:
 	layersInfo = 0
 	layers = []
 	imgList = []
+	iterationOfCreation = None
 
-	def __init__(self, layers, inImgList = None):
+	def __init__(self, layers, inImgList = None, iterationOfCreation = None):  # iterationOfCreation - test (bugfix idea)
 		NeuralNetwork.genAmmount += 1
 		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		# self.layersAmmount = len(layers)
 		self.layersInfo = layers
 		self.imgList = inImgList
+		self.iterationOfCreation = iterationOfCreation  # test (bug fix)
 		print("Network [", self.numb, "]:", self.layersInfo, "\n")
 
 		for x in range(len(self.layersInfo)):
@@ -28,10 +30,10 @@ class NeuralNetwork:
 		arrLayer = []
 		for i in range(layerSize):  # create all neurones for layer
 			if flag == True:
-				arrLayer.append(neuron.Neuron(len(self.layers), self.imgList[i]))  # load img to 0 layer
+				arrLayer.append(neuron.Neuron(len(self.layers), self.imgList[i], self.iterationOfCreation))  # load img to 0 layer
 				# print("imgData:", self.imgList[i])
 			else:
-				arrLayer.append(neuron.Neuron(len(self.layers)))  # leyer's number beginning from 0
+				arrLayer.append(neuron.Neuron(len(self.layers), 0, self.iterationOfCreation))  # leyer's number beginning from 0
 		# print(self.imgList)
 		self.layers.append(arrLayer)  # add layer
 

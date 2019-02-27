@@ -24,8 +24,8 @@ NetworkList = []
 exactRes = "a"
 rightNetworkList = []
 for i in range(8):
-	Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels)  # [256, 64, 4]  send img
-	# Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5])  # [256, 64, 4]  send img
+	Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels, i)  # [256, 64, 4]  send img
+	# Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5], None, i)  # [256, 64, 4]  send img
 	# Network.showOutputNeurones()
 	calcRes = Network.showChosenLetter()
 	if calcRes[0] == exactRes:
@@ -33,15 +33,19 @@ for i in range(8):
 		rightNetworkList.append(int(i))
 
 	NetworkList.append(copy.deepcopy(Network))  # problem is here (I think it is a list of equal Networks)
+
+print(NetworkList)
 print("Right res give this networks:", rightNetworkList)  # +1 because here is real list pos (Network number beginning from 1)
 
 # choose best res from networks list
 IterRightNetworks = []
 IterCalcValRes = []
 for i in rightNetworkList:
+	print("i",i, "nwtwNumb", NetworkList[i].numb)
 	IterRightNetworks.append(NetworkList[i])  # add right networks to list
 	tempList = NetworkList[i].showChosenLetter()
 	IterCalcValRes.append(tempList[1])
+	print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # ??? wtf
 
 # print(IterCalcValRes)
 
