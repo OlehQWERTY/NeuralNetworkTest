@@ -21,7 +21,7 @@ for n in range(len(img)):
 # Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4])  # [256, 64, 4]
 
 NetworkList = []
-exactRes = "a"
+exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 rightNetworkList = []
 for i in range(8):
 	Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels, i)  # [256, 64, 4]  send img
@@ -37,6 +37,7 @@ for i in range(8):
 
 # print(NetworkList)
 print("Right res give this networks:", rightNetworkList)  # +1 because here is real list pos (Network number beginning from 1)
+print("")
 
 # choose best res from networks list
 IterRightNetworks = []
@@ -46,7 +47,17 @@ for i in rightNetworkList:
 	IterRightNetworks.append(NetworkList[i])  # add right networks to list
 	tempList = NetworkList[i].showChosenLetter()
 	IterCalcValRes.append(tempList[1])
-	# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # ??? wtf
+	# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # debug (one of bug fixes)
+
+# print("Best", tempList[0], "is:", max(IterCalcValRes))
+maxIterCalcValRes = max(IterCalcValRes)
+# print("Best", "is:", maxIterCalcValRes)
+for i in IterRightNetworks:
+	tempRes = i.showChosenLetter(True)
+	if tempRes[0] == exactRes and tempRes[1] == maxIterCalcValRes:  # exactRes == a e.x.
+		print("Best Network for this iteration:", i)   # the best Network in this iteration
+		print("max res for", exactRes, ":", maxIterCalcValRes)
+		# i.showChosenLetter()
 
 # print(IterCalcValRes)
 

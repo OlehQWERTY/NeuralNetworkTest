@@ -60,7 +60,7 @@ class NeuralNetwork:
 		for neuronInstance in self.layers[len(self.layersInfo) - 1]:  # show last layer
 			neuronInstance.info()
 
-	def showChosenLetter(self):
+	def showChosenLetter(self, silent = False):
 		# temp to show a, b, c, d
 		lettersArr = ["a", "b", "c", "d"]
 		tempArr = {"a": 0, "b": 0, "c": 0, "d": 0}
@@ -68,11 +68,12 @@ class NeuralNetwork:
 			# print(tempArr[neuron])
 			# print(self.layers[len(self.layersInfo) - 1][neuron].value)  # show last layer
 			tempArr[lettersArr[neuron]] = self.layers[len(self.layersInfo) - 1][neuron].value
-		print(tempArr)
 		theBiggestValKey = max(tempArr.items(), key=operator.itemgetter(1))[0]
 		maxKeyAndVal = [theBiggestValKey, tempArr[theBiggestValKey]]
-		print("Res[", self.numb, "]:", maxKeyAndVal)
-		print("")
+		if not silent:
+			print(tempArr)
+			print("Res[", self.numb, "]:", maxKeyAndVal)
+			print("")
 		return(maxKeyAndVal)
 
 	# try to copy neurones list to fix similar neurones for all NeuralNetwork list objects
