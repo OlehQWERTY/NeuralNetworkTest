@@ -1,5 +1,6 @@
 import neuron
 import operator  # for max in dict
+import copy # try to copy neurones list to fix similar neurones for all NeuralNetwork list objects
 
 class NeuralNetwork:
 	genAmmount = 0
@@ -73,6 +74,14 @@ class NeuralNetwork:
 		print("Res[", self.numb, "]:", maxKeyAndVal)
 		print("")
 		return(maxKeyAndVal)
+
+	# try to copy neurones list to fix similar neurones for all NeuralNetwork list objects
+	def returnLayers(self):
+		return copy.deepcopy(self.layers)
+
+	def initLayers(self, layers):
+		# try to load neurones list to fix similar neurones for all NeuralNetwork list objects
+		self.layers = layers
 			
 	@staticmethod
 	def howMany(silent = False):

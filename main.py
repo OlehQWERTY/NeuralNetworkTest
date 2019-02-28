@@ -32,20 +32,21 @@ for i in range(8):
 		# print("Right result!")
 		rightNetworkList.append(int(i))
 
-	NetworkList.append(copy.deepcopy(Network))  # problem is here (I think it is a list of equal Networks)
+	NetworkList.append(copy.deepcopy(Network))
+	NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 
-print(NetworkList)
+# print(NetworkList)
 print("Right res give this networks:", rightNetworkList)  # +1 because here is real list pos (Network number beginning from 1)
 
 # choose best res from networks list
 IterRightNetworks = []
 IterCalcValRes = []
 for i in rightNetworkList:
-	print("i",i, "nwtwNumb", NetworkList[i].numb)
+	# print("i",i, "nwtwNumb", NetworkList[i].numb)
 	IterRightNetworks.append(NetworkList[i])  # add right networks to list
 	tempList = NetworkList[i].showChosenLetter()
 	IterCalcValRes.append(tempList[1])
-	print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # ??? wtf
+	# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # ??? wtf
 
 # print(IterCalcValRes)
 
