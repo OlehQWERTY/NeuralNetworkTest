@@ -17,7 +17,7 @@ class NeuralNetwork:
 		self.layersInfo = layers
 		self.imgList = inImgList
 		self.iterationOfCreation = iterationOfCreation  # test (bug fix)
-		print("Network [", self.numb, "]:", self.layersInfo, "\n")
+		# print("Network [", self.numb, "]:", self.layersInfo, "\n")
 
 		for x in range(len(self.layersInfo)):
 			flag = False
