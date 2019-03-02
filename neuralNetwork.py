@@ -27,6 +27,14 @@ class NeuralNetwork:
 
 		self.__createSynapses()
 
+	# def correctAmmount(self):  # when copy list of neural networks constructor is not called so when orig obj and copy is del - ammount - 2
+	# 	NeuralNetwork.genAmmount += 8
+
+
+	def __del__(self):  # ammount -1 (problem with coppied objsects)
+		NeuralNetwork.genAmmount -= 1
+		# print("I'll be back again!")
+
 	def __createLayer(self, layerSize, flag = False):  # flag - create 0 layer with img values 
 		arrLayer = []
 		for i in range(layerSize):  # create all neurones for layer
@@ -71,9 +79,9 @@ class NeuralNetwork:
 		theBiggestValKey = max(tempArr.items(), key=operator.itemgetter(1))[0]
 		maxKeyAndVal = [theBiggestValKey, tempArr[theBiggestValKey]]
 		if not silent:
-			print(tempArr)
+			# print(tempArr)
 			print("Res[", self.numb, "]:", maxKeyAndVal)
-			print("")
+			# print("")
 		return(maxKeyAndVal)
 
 	# try to copy neurones list to fix similar neurones for all NeuralNetwork list objects

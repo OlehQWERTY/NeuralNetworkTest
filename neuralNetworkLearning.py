@@ -3,8 +3,8 @@ import cv2
 import numpy as np
 import neuralNetwork
 import copy  # importing "copy" for copy operations 
+import time
 
-tempIterationOOO = 0
 
 def imgLogic(imgName = None):
 	if imgName is None:
@@ -26,7 +26,10 @@ def imgLogic(imgName = None):
 
 def networkLearningIter(exactRes, silent = False, pixels = None):
 	# Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4])  # [256, 64, 4]
+	# if 'NetworkList' in locals():
+	# 	print("In locals()")
 	NetworkList = []
+
 	# exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 	rightNetworkList = []
 	for i in range(8):
@@ -39,7 +42,7 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 		if calcRes[0] == exactRes:
 			# print("Right result!")
 			rightNetworkList.append(int(i))
-
+		# Network.correctAmmount()  # fix numeration problem (see neural network's constructor, destructor)
 		NetworkList.append(copy.deepcopy(Network))
 		NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 
@@ -76,32 +79,25 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 	# print(IterCalcValRes)
 
 
-def networkLearning(iterationAmmount = 10, i = None):
-
+def networkLearning(iterationAmmount = 10):
 	imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
 	"b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", \
 	"c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
 	"d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
 
-	if i is None:  # if we'll get no result for current iteration repeat it one more time
-		for n in range(len(imgNamesList)):
-			if i == imgNamesList[n]:
-				imgNamesList = imgNamesList[n:-1]  # cut rest of the list with img names
-# bug sowhere here --------------------------------------------------------------------------------------------
 	for i in imgNamesList:
 		pixels = imgLogic(i)
 		print(i)
 
 		for n in range(iterationAmmount):
-			res = networkLearningIter(i[0], True, pixels)
-			if res is None:
-				break
-		else:
-			print("One more networkLearning!")
-			networkLearning(iterationAmmount, i)
+			res = None
+			while res is None:
+				preTime = time.time()
+				res = networkLearningIter(i[0], True, pixels)  # get res of iter
+				print(time.time() - preTime)
 
-			# 	n-=1
-	# networkLearningIter
+				if res is not None:
+					res.showChosenLetter()
 
 
 networkLearning(1)
