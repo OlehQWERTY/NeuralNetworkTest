@@ -11,6 +11,7 @@ class NeuralNetwork:
 	iterationOfCreation = None
 
 	def __init__(self, layers, inImgList = None, iterationOfCreation = None):  # iterationOfCreation - test (bugfix idea)
+		print("constructor")
 		NeuralNetwork.genAmmount += 1
 		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		# self.layersAmmount = len(layers)
@@ -79,7 +80,7 @@ class NeuralNetwork:
 		return(maxKeyAndVal)
 
 	def returnLayers(self):
-		return copy.deepcopy(self.layers)
+		return copy.deepcopy(self.layers)  # list copy ???
 
 	def initLayers(self, layers):
 		self.layers = layers

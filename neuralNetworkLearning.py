@@ -39,45 +39,53 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 		else:
 			Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5], None, i)  # [256, 64, 4]  send img
 		# Network.showOutputNeurones()
-		calcRes = Network.showChosenLetter(True)
+		# calcRes = Network.showChosenLetter(True)
+		# if calcRes[0] == exactRes:
+		# 	# print("Right result!")
+		# 	rightNetworkList.append(int(i))
+		# Network.correctAmmount()  # fix numeration problem (see neural network's constructor, destructor)
+		NetworkList.append(copy.deepcopy(Network))  # try to call manualy __createSynapses()
+		NetworkList[len(NetworkList) - 1].initLayers(copy.deepcopy(Network.returnLayers()))  # hard copy of neurones Layers
+
+
+		# print(NetworkList[len(NetworkList) - 1].returnLayers())
+
+		calcRes = NetworkList[len(NetworkList) - 1].showChosenLetter(True)
 		if calcRes[0] == exactRes:
 			# print("Right result!")
 			rightNetworkList.append(int(i))
-		# Network.correctAmmount()  # fix numeration problem (see neural network's constructor, destructor)
-		NetworkList.append(copy.deepcopy(Network))  # try to call manualy __createSynapses()
-		NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 
-	# print(NetworkList)
-	if not silent:  # without console output
-		print("Right res give this networks:", rightNetworkList)  # +1 because here is real list pos (Network number beginning from 1)
-		print("")
+	# # print(NetworkList)
+	# if not silent:  # without console output
+	# 	print("Right res give this networks:", rightNetworkList)  # +1 because here is real list pos (Network number beginning from 1)
+	# 	print("")
 
-	# choose best res from networks list
-	IterRightNetworks = []
-	IterCalcValRes = []
-	for i in rightNetworkList:
-		# print("i",i, "nwtwNumb", NetworkList[i].numb)
-		IterRightNetworks.append(NetworkList[i])  # add right networks to list
-		tempList = NetworkList[i].showChosenLetter(silent)
-		IterCalcValRes.append(tempList[1])
-		# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # debug (one of bug fixes)
+	# # choose best res from networks list
+	# IterRightNetworks = []
+	# IterCalcValRes = []
+	# for i in rightNetworkList:
+	# 	# print("i",i, "nwtwNumb", NetworkList[i].numb)
+	# 	IterRightNetworks.append(NetworkList[i])  # add right networks to list
+	# 	tempList = NetworkList[i].showChosenLetter(silent)
+	# 	IterCalcValRes.append(tempList[1])
+	# 	# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # debug (one of bug fixes)
 
-	# print("Best", tempList[0], "is:", max(IterCalcValRes))
-	if len(IterCalcValRes) >= 1:
-		maxIterCalcValRes = max(IterCalcValRes)
-		# print("Best", "is:", maxIterCalcValRes)
-		for i in IterRightNetworks:
-			tempRes = i.showChosenLetter(True)
-			if tempRes[0] == exactRes and tempRes[1] == maxIterCalcValRes:  # exactRes == a e.x.
-				if not silent:  # without console output
-					print("Best Network for this iteration:", i)   # the best Network in this iteration
-					print("max res for", exactRes, ":", maxIterCalcValRes)
-					# i.showChosenLetter()
-				return i
-	else:
-		print("networkLearningIter None")
-		return None
-	# print(IterCalcValRes)
+	# # print("Best", tempList[0], "is:", max(IterCalcValRes))
+	# if len(IterCalcValRes) >= 1:
+	# 	maxIterCalcValRes = max(IterCalcValRes)
+	# 	# print("Best", "is:", maxIterCalcValRes)
+	# 	for i in IterRightNetworks:
+	# 		tempRes = i.showChosenLetter(True)
+	# 		if tempRes[0] == exactRes and tempRes[1] == maxIterCalcValRes:  # exactRes == a e.x.
+	# 			if not silent:  # without console output
+	# 				print("Best Network for this iteration:", i)   # the best Network in this iteration
+	# 				print("max res for", exactRes, ":", maxIterCalcValRes)
+	# 				# i.showChosenLetter()
+	# 			return i
+	# else:
+	# 	print("networkLearningIter None")
+	# 	return None
+	# # print(IterCalcValRes)
 
 
 def mutation(bestNeuralNetwork):
