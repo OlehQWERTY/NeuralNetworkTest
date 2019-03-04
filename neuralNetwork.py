@@ -27,28 +27,26 @@ class NeuralNetwork:
 
 		self.__createSynapses()
 
-	# def correctAmmount(self):  # when copy list of neural networks constructor is not called so when orig obj and copy is del - ammount - 2
-	# 	NeuralNetwork.genAmmount += 8
-
-
 	def __del__(self):  # ammount -1 (problem with coppied objsects)
 		NeuralNetwork.genAmmount -= 1
-		# print("I'll be back again!")
+		print("killed")
+		self.release_list(self.layers)
+
+	def release_list(self, a):  # try to fix memory leakage
+		del a[:]
+		del a
 
 	def __createLayer(self, layerSize, flag = False):  # flag - create 0 layer with img values 
 		arrLayer = []
 		for i in range(layerSize):  # create all neurones for layer
 			if flag == True:
 				arrLayer.append(neuron.Neuron(len(self.layers), self.imgList[i], self.iterationOfCreation))  # load img to 0 layer
-				# print("imgData:", self.imgList[i])
 			else:
 				arrLayer.append(neuron.Neuron(len(self.layers), 0, self.iterationOfCreation))  # leyer's number beginning from 0
-		# print(self.imgList)
 		self.layers.append(arrLayer)  # add layer
 
 	def __createSynapses(self):
 		for currentLayer in range(len(self.layersInfo)):
-			# print(currentLayer)
 			for neuron in range(len(self.layers[currentLayer])):
 				if currentLayer == 0:
 					self.layers[currentLayer][neuron].synapses( [None] )  # first layer
@@ -56,8 +54,6 @@ class NeuralNetwork:
 					self.layers[currentLayer][neuron].synapses( self.layers[currentLayer - 1] )  # currentLayer - 1 - prelayer
 
 				self.layers[currentLayer][neuron].countValue()
-			# print(neuron)
-		# self.layers[currentLayer][0].info()  # neurone for synapse func()
 
 	def showAllNeurones(self):
 		for n in self.layers:
@@ -73,23 +69,19 @@ class NeuralNetwork:
 		lettersArr = ["a", "b", "c", "d"]
 		tempArr = {"a": 0, "b": 0, "c": 0, "d": 0}
 		for neuron in range(4): 
-			# print(tempArr[neuron])
-			# print(self.layers[len(self.layersInfo) - 1][neuron].value)  # show last layer
+			print("layers")  # test
+			print(self.layers)  # test
 			tempArr[lettersArr[neuron]] = self.layers[len(self.layersInfo) - 1][neuron].value
 		theBiggestValKey = max(tempArr.items(), key=operator.itemgetter(1))[0]
 		maxKeyAndVal = [theBiggestValKey, tempArr[theBiggestValKey]]
 		if not silent:
-			# print(tempArr)
 			print("Res[", self.numb, "]:", maxKeyAndVal)
-			# print("")
 		return(maxKeyAndVal)
 
-	# try to copy neurones list to fix similar neurones for all NeuralNetwork list objects
 	def returnLayers(self):
 		return copy.deepcopy(self.layers)
 
 	def initLayers(self, layers):
-		# try to load neurones list to fix similar neurones for all NeuralNetwork list objects
 		self.layers = layers
 			
 	@staticmethod
@@ -97,12 +89,3 @@ class NeuralNetwork:
 		if not silent:
 			print('NeuralNetwork\'s ammount {0:d}.'.format(NeuralNetwork.genAmmount))
 		return NeuralNetwork.genAmmount
-
-# N = neuron.Neuron()
-# N1 = neuron.Neuron()
-# N2 = neuron.Neuron()
-# N2.howMany()
-# N2.howMany()
-
-# print(N2.activation(8))
-# print("main")

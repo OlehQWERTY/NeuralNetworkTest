@@ -32,7 +32,8 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 
 	# exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 	rightNetworkList = []
-	for i in range(8):
+	for i in range(8):  # 8 random weight networks
+		print("i:", i)
 		if pixels is not None:
 			Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels, i)  # [256, 64, 4]  send img
 		else:
@@ -43,7 +44,7 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 			# print("Right result!")
 			rightNetworkList.append(int(i))
 		# Network.correctAmmount()  # fix numeration problem (see neural network's constructor, destructor)
-		NetworkList.append(copy.deepcopy(Network))
+		NetworkList.append(copy.deepcopy(Network))  # try to call manualy __createSynapses()
 		NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 
 	# print(NetworkList)
@@ -79,11 +80,19 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 	# print(IterCalcValRes)
 
 
+def mutation(bestNeuralNetwork):
+	mutatedNetworkList = []
+	rightNetworkList = []
+	for i in range(8):  # 8 mutated weight networks
+		mutatedNetworkList.append(copy.deepcopy(bestNeuralNetwork))
+		mutatedNetworkList[len(mutatedNetworkList) - 1].initLayers(mutatedNetworkList.returnLayers())  # hard copy of neurones Layers
+
 def networkLearning(iterationAmmount = 10):
-	imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
-	"b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", \
-	"c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
-	"d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
+	# imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
+	# "b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", \
+	# "c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
+	# "d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
+	imgNamesList = ["a_1.png"]
 
 	for i in imgNamesList:
 		pixels = imgLogic(i)
@@ -99,8 +108,16 @@ def networkLearning(iterationAmmount = 10):
 				if res is not None:
 					res.showChosenLetter()
 
+from pympler.tracker import SummaryTracker
+tracker = SummaryTracker()
 
-networkLearning(1)
+# ... some code you want to investigate ...
+
+
+networkLearning(10)
+
+tracker.print_diff()
+
 
 # Network.showAllNeurones()  # all neurones showe some info about eachselves
 
