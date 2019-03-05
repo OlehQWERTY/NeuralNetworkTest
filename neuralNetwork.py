@@ -70,8 +70,8 @@ class NeuralNetwork:
 		lettersArr = ["a", "b", "c", "d"]
 		tempArr = {"a": 0, "b": 0, "c": 0, "d": 0}
 		for neuron in range(4): 
-			print("layers")  # test
-			print(self.layers)  # test
+			# print("layers")  # test
+			# print(self.layers)  # test
 			tempArr[lettersArr[neuron]] = self.layers[len(self.layersInfo) - 1][neuron].value
 		theBiggestValKey = max(tempArr.items(), key=operator.itemgetter(1))[0]
 		maxKeyAndVal = [theBiggestValKey, tempArr[theBiggestValKey]]
@@ -80,10 +80,13 @@ class NeuralNetwork:
 		return(maxKeyAndVal)
 
 	def returnLayers(self):
+		# print("returnLayers", self.layers)
 		return copy.deepcopy(self.layers)  # list copy ???
 
 	def initLayers(self, layers):
-		self.layers = layers
+		self.layers = copy.deepcopy(layers)  # deep.copy try
+		# print("Init")
+		# print(layers)
 			
 	@staticmethod
 	def howMany(silent = False):

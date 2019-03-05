@@ -33,6 +33,7 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 	# exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 	rightNetworkList = []
 	for i in range(8):  # 8 random weight networks
+		# Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5], None)  # test
 		print("i:", i)
 		if pixels is not None:
 			Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels, i)  # [256, 64, 4]  send img
@@ -45,15 +46,19 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 		# 	rightNetworkList.append(int(i))
 		# Network.correctAmmount()  # fix numeration problem (see neural network's constructor, destructor)
 		NetworkList.append(copy.deepcopy(Network))  # try to call manualy __createSynapses()
-		NetworkList[len(NetworkList) - 1].initLayers(copy.deepcopy(Network.returnLayers()))  # hard copy of neurones Layers
+		NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
+
+		del Network
+
+	return NetworkList
 
 
 		# print(NetworkList[len(NetworkList) - 1].returnLayers())
 
-		calcRes = NetworkList[len(NetworkList) - 1].showChosenLetter(True)
-		if calcRes[0] == exactRes:
-			# print("Right result!")
-			rightNetworkList.append(int(i))
+		# calcRes = NetworkList[len(NetworkList) - 1].showChosenLetter(True)
+		# if calcRes[0] == exactRes:
+		# 	# print("Right result!")
+		# 	rightNetworkList.append(int(i))
 
 	# # print(NetworkList)
 	# if not silent:  # without console output
@@ -121,8 +126,12 @@ tracker = SummaryTracker()
 
 # ... some code you want to investigate ...
 
-
-networkLearning(10)
+List = networkLearningIter("a")
+print("len", len(List))
+List[2].showChosenLetter()
+List[4].showChosenLetter()
+List[6].showChosenLetter()
+# networkLearning(2)
 
 tracker.print_diff()
 
