@@ -11,8 +11,8 @@ class NeuralNetwork:
 	iterationOfCreation = None
 
 	def __init__(self, layers, inImgList = None, iterationOfCreation = None):  # iterationOfCreation - test (bugfix idea)
-		print("constructor")
-		NeuralNetwork.genAmmount += 1
+		# print("constructor")
+		NeuralNetwork.genAmmount += 1  
 		self.numb = self.howMany(True) # Neuron.genAmmount  # my number among gen neurones
 		# self.layersAmmount = len(layers)
 		self.layersInfo = layers
@@ -30,7 +30,7 @@ class NeuralNetwork:
 
 	def __del__(self):  # ammount -1 (problem with coppied objsects)
 		NeuralNetwork.genAmmount -= 1
-		print("killed")
+		# print("killed")
 		self.release_list(self.layers)
 
 	def release_list(self, a):  # try to fix memory leakage
