@@ -80,7 +80,11 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 	IterCalcValRes = []
 	for i in rightNetworkList:
 		# print("i",i, "nwtwNumb", NetworkList[i].numb)
-		IterRightNetworks.append(NetworkList[i])  # add right networks to list
+		IterRightNetworks.append(copy.deepcopy(NetworkList[i]))  # add right networks to list
+		IterRightNetworks[len(IterRightNetworks) - 1].initLayers(NetworkList[i].returnLayers())  # hard copy of neurones Layers
+		# del NetworkList[i]
+
+
 		tempList = NetworkList[i].showChosenLetter(silent)
 		IterCalcValRes.append(tempList[1])
 		# print("iterationOfCreation:", NetworkList[i].iterationOfCreation)  # debug (one of bug fixes)
@@ -96,6 +100,7 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 					print("Best Network for this iteration:", i)   # the best Network in this iteration
 					print("max res for", exactRes, ":", maxIterCalcValRes)
 					# i.showChosenLetter()
+				# print(i)
 				return i
 	else:
 		print("networkLearningIter None")
@@ -103,12 +108,17 @@ def networkLearningIter(exactRes, silent = False, pixels = None):
 	# print(IterCalcValRes)
 
 
-def mutation(bestNeuralNetwork):
+def mutation(bestNeuralNetwork, ammount = 8):
 	mutatedNetworkList = []
-	rightNetworkList = []
-	for i in range(8):  # 8 mutated weight networks
+	tmpMutatedNetwork = []
+	for i in range(ammount):  # 8 mutated weight networks
 		mutatedNetworkList.append(copy.deepcopy(bestNeuralNetwork))
-		mutatedNetworkList[len(mutatedNetworkList) - 1].initLayers(mutatedNetworkList.returnLayers())  # hard copy of neurones Layers
+		mutatedNetworkList[len(mutatedNetworkList) - 1].initLayers(bestNeuralNetwork.returnLayers())  # hard copy of neurones Layers
+
+		# add func random mutation 
+		
+		# NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
+		# del Network
 
 def networkLearning(iterationAmmount = 10):
 	imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
@@ -128,6 +138,8 @@ def networkLearning(iterationAmmount = 10):
 				preTime = time.time()
 				res = networkLearningIter(i[0], True, pixels)  # get res of iter
 				print("execution time:", time.time() - preTime)
+				# print("res1", res)
+				# res.showChosenLetter()
 
 				if res is not None:
 					res.showChosenLetter()
