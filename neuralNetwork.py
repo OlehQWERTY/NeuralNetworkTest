@@ -1,6 +1,7 @@
 import neuron
 import operator  # for max in dict
 import copy # try to copy neurones list to fix similar neurones for all NeuralNetwork list objects
+import random
 
 class NeuralNetwork:
 	genAmmount = 0
@@ -47,7 +48,7 @@ class NeuralNetwork:
 				arrLayer.append(neuron.Neuron(len(self.layers), 0, self.iterationOfCreation))  # leyer's number beginning from 0
 		self.layers.append(arrLayer)  # add layer
 
-	def __createSynapses(self, flgChangeWeights = True):
+	def __createSynapses(self):
 		for currentLayer in range(len(self.layersInfo)):
 			for neuron in range(len(self.layers[currentLayer])):
 				if currentLayer == 0:
@@ -57,14 +58,52 @@ class NeuralNetwork:
 
 				self.layers[currentLayer][neuron].countValue()
 
+	# not tested
 	def changeInputVals(inImgList = None):  # only for existing Networks
 		if len(self.layers) == self.layersInfo:  # equal sizes means that this network was coppied (innited and with counted data...)
-			self.imgList = inImgList
-			for i in self.layers[0]:
-				;  # continue
+			self.imgList = inImgList  # is changing or stell the same???
+			for i in range(len(self.layersInfo[0])):  # init first layer's val with new img data
+				self.layers[0][i] = self.imgList[i]
+
+			for currentLayer in range(len(self.layersInfo)):
+				for neuron in range(len(self.layers[currentLayer])):
+					if currentLayer != 0:  # recalc val for all neurones (exept 0 level (they == img data)). Weight leaves the same.
+						self.layers[currentLayer][neuron].countValue()
 		else:
 			print("changeInputVals (NeuralNetwork):", "not appropriate network!")  # copy error msg func (flask prj) or write new decorated one
 			return None
+
+	# not tested
+	def mutation(self, percentage = 0.0005):  # percentage in range 0 - 100 %
+		# self.layersInfo
+		# self.layers
+		percentage = percentage * 0.01  # convert %
+		print("mutation")
+
+		neuronesAmmount = 1
+		for i in self.layersInfo:
+			neuronesAmmount *= i
+		percentageNeuronesAmmount = int(neuronesAmmount * percentage)
+
+		changing = []
+		for i in range(percentageNeuronesAmmount):
+			tmpLayerNumb = random.randint(1, (len(self.layersInfo)-1))  # 0 layer has no waight
+			tmpNeuroneNumb = random.randint(0, self.layersInfo[tmpLayerNumb] - 1)
+			synapsesAmmount = self.layersInfo[tmpLayerNumb - 1]
+			tmpSynapse = random.randint(0, synapsesAmmount - 1)
+			# print(self.layersInfo[tmpLayerNumb])
+			tmpVal = random.uniform(-0.1, 0.1)
+			# changing.append([tmpLayerNumb, tmpNeuroneNumb, tmpSynapse,tmpVal])
+			print([tmpLayerNumb, tmpNeuroneNumb, tmpSynapse,tmpVal])
+			# 256, 64, 8, 4
+			print("prev weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
+			self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse] = self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse] + tmpVal
+			print("mod weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
+		# print("neuronesAmmount", neuronesAmmount)
+		# print("neuronesAmmount percentage", percentageNeuronesAmmount)
+		# print("weight list", self.layers[1][1].weightList)
+		# print("changing", changing)
+		# random.randint(12, 56)
 
 	def showAllNeurones(self):
 		for n in self.layers:
