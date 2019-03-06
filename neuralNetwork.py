@@ -74,7 +74,7 @@ class NeuralNetwork:
 			return None
 
 	# not tested
-	def mutation(self, percentage = 0.0005):  # percentage in range 0 - 100 %
+	def mutation(self, percentage = 5):  # percentage in range 0 - 100 %
 		# self.layersInfo
 		# self.layers
 		percentage = percentage * 0.01  # convert %
@@ -94,11 +94,15 @@ class NeuralNetwork:
 			# print(self.layersInfo[tmpLayerNumb])
 			tmpVal = random.uniform(-0.1, 0.1)
 			# changing.append([tmpLayerNumb, tmpNeuroneNumb, tmpSynapse,tmpVal])
-			print([tmpLayerNumb, tmpNeuroneNumb, tmpSynapse,tmpVal])
-			# 256, 64, 8, 4
-			print("prev weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
+			# print([tmpLayerNumb, tmpNeuroneNumb, tmpSynapse,tmpVal])
+			# # 256, 64, 8, 4
+			# print("prev weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
 			self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse] = self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse] + tmpVal
-			print("mod weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
+
+		for currentLayer in range(len(self.layersInfo)):
+			for neuron in range(len(self.layers[currentLayer])):
+				self.layers[currentLayer][neuron].countValue()
+			# print("mod weight", self.layers[tmpLayerNumb][tmpNeuroneNumb].weightList[tmpSynapse])
 		# print("neuronesAmmount", neuronesAmmount)
 		# print("neuronesAmmount percentage", percentageNeuronesAmmount)
 		# print("weight list", self.layers[1][1].weightList)

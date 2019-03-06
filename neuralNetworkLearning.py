@@ -43,16 +43,18 @@ def networkLearningIter(exactRes, PrevIterNeuralNetwork = None, silent = False, 
 	# exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 	rightNetworkList = []
 	for i in range(8):  # 8 random weight networks
-
-		if pixels is not None:
-			if PrevIterNeuralNetwork is None:
+		if PrevIterNeuralNetwork is None:
+			if pixels is not None:
 				Network = neuralNetwork.NeuralNetwork([256, 64, 8, 4], pixels, i)  # img and rand weights
 			else:
-				Network = copyObjNetwork(PrevIterNeuralNetwork)
-				# Network.changeInputVals()
+				Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5], None, i)  # [256, 64, 4]  send img
+			# Network.showOutputNeurones()
 		else:
-			Network = neuralNetwork.NeuralNetwork([200, 100, 50, 5], None, i)  # [256, 64, 4]  send img
-		# Network.showOutputNeurones()
+				Network = copyObjNetwork(PrevIterNeuralNetwork)
+				if i != 0:
+					Network.mutation()
+				# Network.changeInputVals()
+
 		calcRes = Network.showChosenLetter(True)
 		if calcRes[0] == exactRes:
 			# print("Right result!")
@@ -109,10 +111,15 @@ def networkLearningIter(exactRes, PrevIterNeuralNetwork = None, silent = False, 
 
 
 def mutation(bestNeuralNetwork, ammount = 8):  # create weight mutated network
-	mutatedNetworkList = []
-	tmpMutatedNetwork = []
+	# mutatedNetworkList = []
+	# tmpMutatedNetwork = []
 
+	# print("mutation123", bestNeuralNetwork.mutation())
+	# bestNeuralNetwork.showChosenLetter()
 	bestNeuralNetwork.mutation()
+	# bestNeuralNetwork.showChosenLetter()
+	return copyObjNetwork(bestNeuralNetwork)
+
 	# for i in range(ammount):  # 8 mutated weight networks
 
 	# 	mutatedNetworkList.append(copy.deepcopy(bestNeuralNetwork))
@@ -123,39 +130,49 @@ def mutation(bestNeuralNetwork, ammount = 8):  # create weight mutated network
 		# NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 		# del Network
 
-def networkLearning(iterationAmmount = 10, NeuralNetwork = None):
+def networkLearning(iterationAmmount = 10):
 	# imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
 	# "b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", \
 	# "c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
 	# "d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
 
 	imgNamesList = ["a_1.png"]  # test
+	MutantNetwork = None
 
 	for i in imgNamesList:
 		pixels = imgLogic(i)
 		print(i)
 
 		for n in range(iterationAmmount):
+			# res = None
+			# del res
 			res = None
 			while res is None:
 				preTime = time.time()
-				res = networkLearningIter(i[0], None, True, pixels)  # get res of iter
+				res = networkLearningIter(i[0], MutantNetwork, True, pixels)  # get res of iter
 				print("execution time:", time.time() - preTime)
 				# print("res1", res)
 				# res.showChosenLetter()
 
 				if res is not None:
+					print("1111")
 					res.showChosenLetter()
-					print("Changed")
+					# res.showOutputNeurones()
+					print("Mutant:")
 					pixels = imgLogic(i)
-					mutation(res)
+					MutantNetwork = mutation(res)
+					MutantNetwork.showChosenLetter()
+					# MutantNetwork = copyObjNetwork(mutation(res))
+					# print("MutantNetwork", MutantNetwork)
+					# MutantNetwork.showOutputNeurones()
 					# changed = networkLearningIter(i[0], res, True, pixels)  # change img 
 					# # changed.changeInputVals("a_2.png")
 					# changed.showChosenLetter()
-	# return res
+	return res
 
 # make copy of NeuralNetwork obj
 def copyObjNetwork(NetworkObjToCopy, delKey = False):
+	# print("NetworkObjToCopy", NetworkObjToCopy)
 	NetworkCopied = copy.deepcopy(NetworkObjToCopy)
 	NetworkCopied.initLayers(NetworkObjToCopy.returnLayers())  # hard copy of neurones Layers
 	if delKey:
@@ -176,7 +193,8 @@ def copyObjNetwork(NetworkObjToCopy, delKey = False):
 # List[2].showChosenLetter()
 # List[4].showChosenLetter()
 # List[2].showChosenLetter()
-networkLearning(1)
+tmp1 = networkLearning(5)
+
 
 # tracker.print_diff()
 
