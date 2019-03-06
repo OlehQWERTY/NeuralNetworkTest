@@ -38,6 +38,7 @@ class Neuron:
 		else:  # any layer exept 0 layer
 			self.value = 0  # default val == -1
 			for neuron in range(len(self.synapsesList)):
+				# print(self.synapsesList[neuron].value * self.weightList[neuron])
 				self.value += self.synapsesList[neuron].value * self.weightList[neuron]
 		self.value = self.activation(self.value)
 

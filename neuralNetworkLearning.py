@@ -68,6 +68,7 @@ def networkLearningIter(exactRes, PrevIterNeuralNetwork = None, silent = False, 
 		# print(NetworkList[len(NetworkList) - 1].returnLayers())
 
 		calcRes = NetworkList[len(NetworkList) - 1].showChosenLetter(True)
+		print(calcRes, len(NetworkList) - 1)
 		if calcRes[0] == exactRes:
 			# print("Right result!")
 			rightNetworkList.append(int(i))
@@ -136,7 +137,10 @@ def networkLearning(iterationAmmount = 10):
 	# "c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
 	# "d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
 
-	imgNamesList = ["a_1.png"]  # test
+	# imgNamesList = ["a_1.png", "a_2.png"]  # test
+
+	imgNamesList = ["a_1.png", "b_1.png", "a_2.png", "b_2.png"]
+
 	MutantNetwork = None
 
 	for i in imgNamesList:
@@ -144,24 +148,27 @@ def networkLearning(iterationAmmount = 10):
 		print(i)
 
 		for n in range(iterationAmmount):
+			print("___________________________")
 			# res = None
 			# del res
+
 			res = None
 			while res is None:
 				preTime = time.time()
+				# print(i[0])
 				res = networkLearningIter(i[0], MutantNetwork, True, pixels)  # get res of iter
 				print("execution time:", time.time() - preTime)
 				# print("res1", res)
 				# res.showChosenLetter()
 
 				if res is not None:
-					print("1111")
-					res.showChosenLetter()
 					# res.showOutputNeurones()
-					print("Mutant:")
-					pixels = imgLogic(i)
-					MutantNetwork = mutation(res)
-					MutantNetwork.showChosenLetter()
+					MutantNetwork = copyObjNetwork(res)
+					# res.showOutputNeurones()
+					# print("Mutant:")
+					# pixels = imgLogic(i)
+					# MutantNetwork = mutation(res)
+					# MutantNetwork.showOutputNeurones()
 					# MutantNetwork = copyObjNetwork(mutation(res))
 					# print("MutantNetwork", MutantNetwork)
 					# MutantNetwork.showOutputNeurones()
@@ -193,7 +200,31 @@ def copyObjNetwork(NetworkObjToCopy, delKey = False):
 # List[2].showChosenLetter()
 # List[4].showChosenLetter()
 # List[2].showChosenLetter()
-tmp1 = networkLearning(5)
+tmp1 = copyObjNetwork(networkLearning(2))
+
+print("++++++++++++++++++++++++++")
+
+print("a_4.png")
+pixels = imgLogic("a_4.png")
+tmp1.changeInputVals(pixels)
+tmp1.showOutputNeurones()
+
+print("a_2.png")
+pixels = imgLogic("a_2.png")
+tmp1.changeInputVals(pixels)
+tmp1.showOutputNeurones()
+
+print("b_4.png")
+pixels = imgLogic("b_4.png")
+tmp1.changeInputVals(pixels)
+tmp1.showOutputNeurones()
+
+print("d_4.png")
+pixels = imgLogic("d_4.png")
+tmp1.changeInputVals(pixels)
+tmp1.showOutputNeurones()
+
+
 
 
 # tracker.print_diff()

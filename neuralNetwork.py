@@ -59,11 +59,12 @@ class NeuralNetwork:
 				self.layers[currentLayer][neuron].countValue()
 
 	# not tested
-	def changeInputVals(inImgList = None):  # only for existing Networks
-		if len(self.layers) == self.layersInfo:  # equal sizes means that this network was coppied (innited and with counted data...)
+	def changeInputVals(self, inImgList = None):  # only for existing Networks
+		# print(len(self.layers), )
+		if len(self.layers) == len(self.layersInfo):  # equal sizes means that this network was coppied (innited and with counted data...)
 			self.imgList = inImgList  # is changing or stell the same???
-			for i in range(len(self.layersInfo[0])):  # init first layer's val with new img data
-				self.layers[0][i] = self.imgList[i]
+			for i in range(self.layersInfo[0]):  # init first layer's val with new img data
+				self.layers[0][i].value = self.imgList[i]
 
 			for currentLayer in range(len(self.layersInfo)):
 				for neuron in range(len(self.layers[currentLayer])):
@@ -78,7 +79,7 @@ class NeuralNetwork:
 		# self.layersInfo
 		# self.layers
 		percentage = percentage * 0.01  # convert %
-		print("mutation")
+		# print("mutation")
 
 		neuronesAmmount = 1
 		for i in self.layersInfo:
