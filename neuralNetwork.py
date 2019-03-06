@@ -10,6 +10,7 @@ class NeuralNetwork:
 	imgList = []
 	iterationOfCreation = None
 
+	# needs to add copying constructor to fix obj counter error
 	def __init__(self, layers, inImgList = None, iterationOfCreation = None):  # iterationOfCreation - test (bugfix idea)
 		# print("constructor")
 		NeuralNetwork.genAmmount += 1  
@@ -46,7 +47,7 @@ class NeuralNetwork:
 				arrLayer.append(neuron.Neuron(len(self.layers), 0, self.iterationOfCreation))  # leyer's number beginning from 0
 		self.layers.append(arrLayer)  # add layer
 
-	def __createSynapses(self):
+	def __createSynapses(self, flgChangeWeights = True):
 		for currentLayer in range(len(self.layersInfo)):
 			for neuron in range(len(self.layers[currentLayer])):
 				if currentLayer == 0:
@@ -55,6 +56,15 @@ class NeuralNetwork:
 					self.layers[currentLayer][neuron].synapses( self.layers[currentLayer - 1] )  # currentLayer - 1 - prelayer
 
 				self.layers[currentLayer][neuron].countValue()
+
+	def changeInputVals(inImgList = None):  # only for existing Networks
+		if len(self.layers) == self.layersInfo:  # equal sizes means that this network was coppied (innited and with counted data...)
+			self.imgList = inImgList
+			for i in self.layers[0]:
+				;  # continue
+		else:
+			print("changeInputVals (NeuralNetwork):", "not appropriate network!")  # copy error msg func (flask prj) or write new decorated one
+			return None
 
 	def showAllNeurones(self):
 		for n in self.layers:
