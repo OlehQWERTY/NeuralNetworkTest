@@ -75,7 +75,7 @@ class NeuralNetwork:
 			return None
 
 	# not tested
-	def mutation(self, percentage = 0.01, val = 0.1):  # percentage in range 0 - 100 %
+	def mutation(self, percentage = 0.01, val = 0.01):  # percentage in range 0 - 100 %
 		# self.layersInfo
 		# self.layers
 		percentage = percentage * 0.01  # convert %

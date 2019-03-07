@@ -6,6 +6,7 @@ import copy  # importing "copy" for copy operations
 import time
 from collections import Counter
 
+numb123 = 0
 # make it possible to use with different params ammount
 # def a_decorator_debug(function_to_decorate):
 # 	def a_wrapper_accepting_arguments(arg1, arg2, arg3):
@@ -40,7 +41,8 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	# if 'NetworkList' in locals():
 	# 	print("In locals()")
 	NetworkList = []
-
+	global numb123
+	numb123 += 1 # it counter
 	# exactRes = "a"  # 'a', 'b', 'c' or 'd' for extraction
 	rightNetworkList = []
 	for i in range(8):  # 8 random weight networks
@@ -60,7 +62,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 				Network = copyObjNetwork(PrevIterNeuralNetwork)
 				if i != 0:
 					# Network.mutation(0.1, 0.05*i)  # test
-					Network.mutation()  # test
+					Network.mutation(0.01, 0.1)  # test
 				# Network.changeInputVals()
 
 		# all photos send to neural network
@@ -87,6 +89,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	for key, val in countedList.items():  # return one key of element with max val
 		if val == maxValues:
 			if key != 0:  # show changing
+				print(numb123, " ____________")
 				print("network:", key, "detected:", val)
 				global preTime1
 				print("Iter Time:", time.time() - preTime1)
@@ -189,7 +192,7 @@ def networkLearning(iterationAmmount = 10):
 	# 		# del res
 
 	for i in range(iterationAmmount):
-		print(i, "___________________________")
+		# print(i, "___________________________")
 
 		# print(pixels)
 			
