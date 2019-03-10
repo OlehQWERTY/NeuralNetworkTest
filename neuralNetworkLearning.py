@@ -12,7 +12,7 @@ numb123 = 0
 # 	def a_wrapper_accepting_arguments(arg1, arg2, arg3):
 # 		from pympler.tracker import SummaryTracker
 # 		tracker = SummaryTracker()
-# 		# print("Смотри, что я получил:", arg1, arg2, arg3)
+# 		# print("See what I got:", arg1, arg2, arg3)
 # 		function_to_decorate(arg1, arg2, arg3)
 # 		tracker.print_diff()
 # 	return a_wrapper_accepting_arguments
@@ -167,10 +167,10 @@ def mutation(bestNeuralNetwork, ammount = 8):  # create weight mutated network
 		# del Network
 
 def networkLearning(iterationAmmount = 10):
-	imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", \
-	"b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", \
-	"c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", \
-	"d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png"]
+	imgNamesList = ["a_1.png", "a_2.png", "a_3.png", "a_4.png", "a_5.png", "a_6.png", "a_7.png", "a_8.png", "a_9.png", "a_10.png", \
+	"b_1.png", "b_2.png", "b_3.png", "b_4.png", "b_5.png", "b_6.png", "b_7.png", "b_8.png", "b_9.png", "b_10.png", \
+	"c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", "c_6.png", "c_7.png", "c_8.png", "c_9.png", "c_10.png", \
+	"d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png", "d_6.png", "d_7.png", "d_8.png", "d_9.png", "d_10.png"]
 
 	# imgNamesList = ["a_1.png", "a_2.png", "b_1.png", "b_2.png", "c_1.png", "c_2.png", "d_1.png", "d_2.png"]  # test
 
