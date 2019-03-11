@@ -6,10 +6,7 @@ import copy  # importing "copy" for copy operations
 import time
 from collections import Counter
 import msgRenuvable 
-
-def toFixed(numObj, digits=0):  # signs after .
-    return f"{numObj:.{digits}f}"
-
+from utility import toFixed
 
 currentIter = 0  # only for progress bar
 numb123 = 0

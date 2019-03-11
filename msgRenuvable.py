@@ -8,7 +8,7 @@
 import os
 
 # singleton
-class Singleton:
+class Singleton:  # make it more universal
 	__instance = None
 	__linesList = []
 	@staticmethod 
@@ -32,7 +32,7 @@ class Singleton:
 		if shift:
 			for i in range(20):
 				print("")
-				
+
 		os.system("clear")
 		for line in Singleton.__linesList:
 			print(line)
