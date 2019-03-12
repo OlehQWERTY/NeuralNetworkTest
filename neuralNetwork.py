@@ -103,7 +103,7 @@ class NeuralNetwork:
 		for neuronInstance in self.layers[len(self.layersInfo) - 1]:  # show last layer
 			neuronInstance.info()
 
-	def showChosenLetter(self, silent = False):
+	def showChosenLetter(self, silent = True):
 		# temp to show a, b, c, d
 		lettersArr = ["a", "b", "c", "d"]
 		tempArr = {"a": 0, "b": 0, "c": 0, "d": 0}
@@ -114,6 +114,16 @@ class NeuralNetwork:
 		if not silent:
 			print("Res[", self.numb, "]:", maxKeyAndVal)
 		return(maxKeyAndVal)
+
+	def outputResQuality(self, expectedRes):
+		suma = 0
+		lettersArr = ["a", "b", "c", "d"]
+		tempArr = {"a": 0, "b": 0, "c": 0, "d": 0}
+		for neuron in range(4): 
+			tempArr[lettersArr[neuron]] = self.layers[len(self.layersInfo) - 1][neuron].value
+			suma += self.layers[len(self.layersInfo) - 1][neuron].value  # sum of all values (a, b, c, d)
+		return tempArr[expectedRes]/suma
+		# print(tempArr)
 
 	def returnLayers(self):
 		return copy.deepcopy(self.layers)

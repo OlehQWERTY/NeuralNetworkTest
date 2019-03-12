@@ -1,12 +1,11 @@
 # layer 0: 256, 1: 64, 2: 4
-import cv2
-import numpy as np
+
 import neuralNetwork
 import copy  # importing "copy" for copy operations 
 import time
 from collections import Counter
 import msgRenuvable 
-from utility import toFixed
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal
 
 currentIter = 0  # only for progress bar
 numb123 = 0
@@ -21,20 +20,6 @@ numb123 = 0
 # 	return a_wrapper_accepting_arguments
 
 
-def imgLogic(imgName = None):
-	if imgName is None:
-		print("Error: please send imgName!")
-		return None
-	imgPath = 'letters/' + imgName  # path to img
-	img = cv2.imread(imgPath,0)
-	pixels = []
-	for n in range(len(img)):
-		for m in range(len(img[n])):
-			tmp = (255 - int(img[n, m]))/255  # get pixel color val and invert colour (default: white - 255, blk - 0)
-			pixels.append(tmp)  # pos n/m check, 
-	# print(len(img)*len(img[0]))  # total img pixels ammount
-	# print(pixels)
-	return pixels
 
 
 def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = None):
@@ -42,6 +27,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	global numb123
 	numb123 += 1 # it counter
 	rightNetworkList = []
+	rightNetworkSumValuesList = []  # not tested
 	for i in range(8):  # 8 random weight networks
 
 		# from pympler.tracker import SummaryTracker
@@ -53,42 +39,75 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 		else:
 				Network = copyObjNetwork(PrevIterNeuralNetwork)
 				if i != 0:
-					Network.mutation(0.01, 0.1)  # test
+					Network.mutation(0.1, 0.1)  # test
 
+		sumQualityNetwork = 0
 		# all photos send to neural network
 		for k in images:
 			Network.changeInputVals(k[1])
-			calcRes = Network.showChosenLetter(True)
+			calcRes = Network.showChosenLetter()
 			if calcRes[0] == k[0]:
 				rightNetworkList.append(int(i))
-		NetworkList.append(copy.deepcopy(Network))  # try to call manualy __createSynapses()
+				# Network.outputResQuality()
+				# print(Network.outputResQuality(k[0]))
+				# rightNetworkValuesList.append(calcRes)  # save right letter val
+				sumQualityNetwork += Network.outputResQuality(k[0])
+		NetworkList.append(copy.deepcopy(Network))
 		NetworkList[len(NetworkList) - 1].initLayers(Network.returnLayers())  # hard copy of neurones Layers
 
 		del Network
 
-	countedList = Counter(rightNetworkList)
-	valsD = countedList.values()
+		rightNetworkSumValuesList.append(sumQualityNetwork)  # add sum for chosing best network is more networks weren't detected
+
+	countedList = Counter(rightNetworkList)  # return [1: 5, a: 87, 3: 8]
+	valsD = countedList.values()  # get val
 	maxValues = max(valsD)
 
+	rightNetworkSumValuesMaxList = []
+	tmpList1 = []
 	for key, val in countedList.items():  # return one key of element with max val
 		if val == maxValues:
-			if key != 0:  # show changing
-				# print(numb123, " ____________")
-				# print("network:", key, "detected:", val)
-				# global preTime1
-				# print("Iter Time:", time.time() - preTime1)
-				# s.addLine(str(numb123) + " ____________")
-				s.addLine("network: " + str(key) + " detected: " + str(val))
-				# s.addLine(str(preTime1))
-				s.addLine("Iter Time: " + str(time.time() - preTime1))
+			# if key != 0:  # show changing
+			# 	# print(numb123, " ____________")
+			# 	# print("network:", key, "detected:", val)
+			# 	# global preTime1
+			# 	# print("Iter Time:", time.time() - preTime1)
+			# 	# s.addLine(str(numb123) + " ____________")
+			s.addLine("network: " + str(key) + " detected: " + str(val))
+			# 	# s.addLine(str(preTime1))
+			s.addLine("Iter Time: " + str(time.time() - preTime1))
 
-				s.addLine("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
-				s.show(True)
-			bestNeuralNetworkNumber = key
-			break
+			s.addLine("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
+			s.show(True)
+			# else:  # best network is # [0], so choose one according to correct neurones val
+			# 	key = extrameListVal(rightNetworkSumValuesList, False)  # return index of max element
+			# 	print(rightNetworkSumValuesList)
+			# 	print("approximation key =", key)
+			# 	print("approximation val =", rightNetworkSumValuesList[key])
+			# bestNeuralNetworkNumber = key
+			# break
+			# print(key)
+			rightNetworkSumValuesMaxList.append(key)
 
+	print("rightNetworkSumValuesList", rightNetworkSumValuesList)
+	print("rightNetworkSumValuesMaxList", rightNetworkSumValuesMaxList)
+	for i in rightNetworkSumValuesMaxList:
+		# print(tmpList1)
+		tmpList1.append(rightNetworkSumValuesList[i])
+		print("tmpList1.append(rightNetworkSumValuesList[i])", rightNetworkSumValuesList[i])
+
+	tmp123 = extrameListVal(tmpList1, False)
+	print("max", tmp123)  # return index of max element
+
+	print("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
+
+	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
+	# bestNeuralNetworkNumber = key
 	# tracker.print_diff()
 
+	# print("NetworkList", len(NetworkList))
+	# print("rightNetworkValuesList", len(rightNetworkValuesList))
+	# print("bestNeuralNetworkNumber", bestNeuralNetworkNumber%8)
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 
 
@@ -131,16 +150,9 @@ def networkLearning(iterationAmmount = 10):
 				MutantNetwork = copyObjNetwork(res)
 	return res
 
-# make copy of NeuralNetwork obj
-def copyObjNetwork(NetworkObjToCopy, delKey = False):
-	NetworkCopied = copy.deepcopy(NetworkObjToCopy)
-	NetworkCopied.initLayers(NetworkObjToCopy.returnLayers())  # hard copy of neurones Layers
-	if delKey:
-		del NetworkObjToCopy
-
-	return NetworkCopied
 
 
+#########################################################################################################
 
 
 
