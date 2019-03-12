@@ -1,3 +1,5 @@
+from debug import Debug
+
 def toFixed(numObj, digits=0):  # ammount of signs after .
     return f"{numObj:.{digits}f}"
 
@@ -40,3 +42,28 @@ def imgLogic(imgName = None):
 
 
 # write normal Singleton, debug class and so on...
+
+
+# make it possible to use with different params ammount
+# def a_decorator_debug(function_to_decorate):
+# 	def a_wrapper_accepting_arguments(arg1, arg2, arg3):
+# 		from pympler.tracker import SummaryTracker
+# 		tracker = SummaryTracker()
+# 		# print("See what I got:", arg1, arg2, arg3)
+# 		function_to_decorate(arg1, arg2, arg3)
+# 		tracker.print_diff()
+# 	return a_wrapper_accepting_arguments
+
+
+
+
+
+
+
+
+
+
+# d = Debug(True)
+
+# # d.log(d.WARNING + "Lolo", "KO")
+# d.log("lololo", "kjdf")

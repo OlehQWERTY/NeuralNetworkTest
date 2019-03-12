@@ -4,23 +4,15 @@ import neuralNetwork
 import copy  # importing "copy" for copy operations 
 import time
 from collections import Counter
-import msgRenuvable 
-from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal
+# import msgRenuvable 
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug
 
 currentIter = 0  # only for progress bar
 numb123 = 0
-# make it possible to use with different params ammount
-# def a_decorator_debug(function_to_decorate):
-# 	def a_wrapper_accepting_arguments(arg1, arg2, arg3):
-# 		from pympler.tracker import SummaryTracker
-# 		tracker = SummaryTracker()
-# 		# print("See what I got:", arg1, arg2, arg3)
-# 		function_to_decorate(arg1, arg2, arg3)
-# 		tracker.print_diff()
-# 	return a_wrapper_accepting_arguments
 
+log = Debug(True)
 
-
+log.log("123", __name__)
 
 def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = None):
 	NetworkList = []
@@ -68,17 +60,18 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	for key, val in countedList.items():  # return one key of element with max val
 		if val == maxValues:
 			# if key != 0:  # show changing
-			# 	# print(numb123, " ____________")
-			# 	# print("network:", key, "detected:", val)
-			# 	# global preTime1
-			# 	# print("Iter Time:", time.time() - preTime1)
+			print(numb123, " ____________")
+			print("network:", key, "detected:", val)
+			global preTime1
+			print("Iter Time:", time.time() - preTime1)
+			print("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 			# 	# s.addLine(str(numb123) + " ____________")
-			s.addLine("network: " + str(key) + " detected: " + str(val))
+			# s.addLine("network: " + str(key) + " detected: " + str(val))
 			# 	# s.addLine(str(preTime1))
-			s.addLine("Iter Time: " + str(time.time() - preTime1))
+			# s.addLine("Iter Time: " + str(time.time() - preTime1))
 
-			s.addLine("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
-			s.show(True)
+			# s.addLine("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
+			# s.show(True)
 			# else:  # best network is # [0], so choose one according to correct neurones val
 			# 	key = extrameListVal(rightNetworkSumValuesList, False)  # return index of max element
 			# 	print(rightNetworkSumValuesList)
@@ -135,12 +128,12 @@ def networkLearning(iterationAmmount = 10):
 		global currentIter  # only for progress bar
 		currentIter = i
 
-		# print("current progress: " + str(currentIter) + '/' + str(iterAmm))
+		print("current progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 
-		s.addLine("current progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
-		s.show()
-		s.clearLines(-1)
-
+		# s.addLine("current progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
+		# s.show()
+		# s.clearLines(-1)
+# 
 		res = None
 		while res is None:
 			preTime = time.time()
@@ -153,12 +146,12 @@ def networkLearning(iterationAmmount = 10):
 
 
 #########################################################################################################
-
-
+d = Debug(True)
+d.log("koko123")
 
 preTime1 = time.time()
 
-s = msgRenuvable.Singleton.getInstance()  # show lines and clear screen
+# s = msgRenuvable.Singleton.getInstance()  # show lines and clear screen
 
 # s.addLine("pretime: " + str(preTime1))
 
