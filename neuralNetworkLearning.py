@@ -5,12 +5,10 @@ import copy  # importing "copy" for copy operations
 import time
 from collections import Counter
 # import msgRenuvable 
-from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug, SaveObj
 D = Debug.getInstance()  # get debug obj
-
 # test
-from saveNeuralNetwork import Settings
-S = Settings("test.dat")
+S = SaveObj("test.dat")
 
 currentIter = 0  # only for progress bar
 numb123 = 0

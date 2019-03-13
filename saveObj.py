@@ -5,7 +5,7 @@ from utility import Debug
 D = Debug.getInstance()
 D.log("___ TEST FOR BEST NETWORK! ___")
 
-class Settings():
+class SaveObj():
     def __init__(self, path):
         self.path = path
         self.data_new = None
