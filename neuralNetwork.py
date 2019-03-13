@@ -136,3 +136,7 @@ class NeuralNetwork:
 		if not silent:
 			print('NeuralNetwork\'s ammount {0:d}.'.format(NeuralNetwork.genAmmount))
 		return NeuralNetwork.genAmmount
+
+# from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug
+# D = Debug.getInstance(True)  # get debug obj
+# D.log("1")

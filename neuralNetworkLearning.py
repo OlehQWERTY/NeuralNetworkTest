@@ -6,13 +6,10 @@ import time
 from collections import Counter
 # import msgRenuvable 
 from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug
+D = Debug.getInstance()  # get debug obj
 
 currentIter = 0  # only for progress bar
 numb123 = 0
-
-log = Debug(True)
-
-log.log("123", __name__)
 
 def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = None):
 	NetworkList = []
@@ -146,8 +143,12 @@ def networkLearning(iterationAmmount = 10):
 
 
 #########################################################################################################
-d = Debug(True)
-d.log("koko123")
+# d = Debug(True)
+# d.log("koko123")
+
+# D.turnON_OFF(False)
+D.log("1254")
+
 
 preTime1 = time.time()
 

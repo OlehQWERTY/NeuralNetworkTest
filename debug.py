@@ -1,27 +1,14 @@
-# from debug import debug
+#  from debug import Debug
 
-# log = debug(True)
+#  class is singleton!!!
 
-# log.log("koko")
+#  D = Debug.getInstance(True)
 
-# log(self.WARNING + name) or log.log(log.WARNING + name) from outside
+#  D.log("lolo", "jdjdnc", "12354")
 
-import functools
-import sys
-import os
-import inspect
+#  D.turnON_OFF(False)  # turn OFF
 
-
-# def _debugDecorator(function_to_decorate):
-#     @functools.wraps(function_to_decorate)
-#     def a_wrapper_accepting_arbitrary_arguments(*args, **kwargs):
-#     # def a_wrapper_accepting_arbitrary_arguments(self, s, name):
-#         # print("Передали ли мне что-нибудь?:")
-#         # print(args)
-#         # print(kwargs)
-
-#         function_to_decorate(*args, **kwargs)
-#     return a_wrapper_accepting_arbitrary_arguments
+import inspect  # required to get caller script file's name
 
 class Debug:
     # colours for messages
@@ -29,74 +16,131 @@ class Debug:
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
     WARNING = '\033[93m'
+    ORANGE = '\033[33m'
+    BLUE = '\033[34m'
+    PURPLE = '\033[35m'
+    CYAN = '\033[36m'
+    LIGHTGREY = '\033[37m'
+    DARKGREY = '\033[90m'
+    LIGHTRED = '\033[91m'
+    LIGHTGREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    LIGHTBLUE = '\033[94m'
+    PINK = '\033[95m'
+    LIGHTCYAN = '\033[96m'
+    # reserved for error and sys msg only
     FAIL = '\033[91m'
-    ENDC = '\033[0m'
+    # Don't work on Windows
+    ENDC = '\033[0m'  
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
     ORDINARY = '\033[0m'
 
-    def __init__(self, flag, name=None):
-        # print(sys._getframe().f_code.co_name)
-        if flag:
-            # if name is not None:
-            #    print(name, "module turn on debugging")
-            self.DEBUG = True
+    colorsList = [  # available for auto coloring
+        ["HEADER", '\033[95m'],
+        ["OKBLUE", '\033[94m'],
+        ["OKGREEN", '\033[92m'],
+        ["WARNING", '\033[93m'],
+        ["ORANGE", '\033[33m'],
+        ["BLUE", '\033[34m'],
+        ["PURPLE", '\033[35m'],
+        ["CYAN", '\033[36m'],
+        ["LIGHTGREY", '\033[37m'],
+        ["DARKGREY", '\033[90m'],
+        ["LIGHTRED", '\033[91m'],
+        ["LIGHTGREEN", '\033[92m'],
+        ["YELLOW", '\033[93m'],
+        ["LIGHTBLUE", '\033[94m'],
+        ["PINK", '\033[95m'],
+        ["LIGHTCYAN", '\033[96m']
+    ]
+
+    fDEBUG = True
+    whoCalledFileNameList = []
+    newFileNumb = 1
+
+    __instance = None
+    __linesList = []
+    @staticmethod 
+    def getInstance():
+        """ Static access method. """
+        if Debug.__instance == None:
+            Debug()
+        return Debug.__instance
+    def __init__(self):
+        """ Virtually private constructor. """
+        if Debug.__instance != None:
+            raise Exception("This class is a singleton!")
         else:
-            self.DEBUG = False
+            Debug.__instance = self
+        #  not possible to make func from it (return folder of this func)
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
+        whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
+        whoCalledFileName = whoCalledFileName_TMP[-1]
 
-    # @_debugDecorator
+        print(self.FAIL + whoCalledFileName + ":", "Debugging is turned ON by constructor!", self.ORDINARY)
+ 
+
     def log(self, *args, **kwargs):
-        name = "__main__"
-    # def log(self, s, name=None):
-        if self.DEBUG:  # DEBUG = True
+        if self.fDEBUG:  # DEBUG = True
             try:
-                if name is None:  # analog for ordinary print func
-                    # print(s)
-                    print("args")
-                else:
-                    if name == "__main__":  # other colour for __main__
-                        # print(args, **kwargs)
-                        # print(self.OKBLUE + name + ": " + self.ORDINARY, s)
-                        tmp = ""
-                        for i in args:
-                            tmp += i + ' '
+                #  not possible to make func from it (return folder of this func)
+                frame = inspect.stack()[1]
+                module = inspect.getmodule(frame[0])
+                tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
+                whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
+                whoCalledFileName = whoCalledFileName_TMP[-1]
 
-                        print(self.OKBLUE + name + ":" + self.ORDINARY, tmp[:-1])
-                        print(sys._getframe(1).f_code.co_name)
-                        print(sys._getframe().f_code.co_name)
-                        # print(__file__)
-                        print(os.path.basename(__file__))
-                        print(os.path.realpath(__file__))
-                        print(inspect.getfile(inspect.currentframe()))         # lib/bar.py
+                if whoCalledFileName:  # other colour for __main__
+                    if whoCalledFileName not in self.whoCalledFileNameList:
+                        self.whoCalledFileNameList.append([self.newFileNumb % len(self.colorsList), whoCalledFileName])
+                        self.newFileNumb += 1
 
+                    tmp = ""
+                    for i in args:
+                        tmp += str(i) + ' '
 
-
-                        frame = inspect.stack()[1]
-                        module = inspect.getmodule(frame[0])
-                        # module = sys._getframe(1).f_code.co_name
-                        print("module.__file__", module.__file__)  # finaly)))
-
-                    # else:
-                        # print(self.WARNING + name + ": " + self.ORDINARY + s)  #  + name, ": " (space b name & :)
-                        # print(self.WARNING + name + ": " + self.ORDINARY + s)  #  + name, ": " (space b name & :)
-                    return self.DEBUG
+                    # print(self.OKBLUE + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
+                    print(self.colorIndex(whoCalledFileName) + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
+                return self.fDEBUG
             except TypeError:  # not possible to convert to str() (e.x. [list])
-               # do something with None here
-                print(self.WARNING + name + ": ", self.ORDINARY, s)
+               # do something with None here 
+                tmp = ""
+                for i in args:
+                    tmp += i + ' '
+                print(self.colorIndex(whoCalledFileName) + whoCalledFileName + ":", self.ORDINARY, tmp[:-1])
             except ValueError:
-                print(self.FAIL + name + ": " + self.ORDINARY + "ValueError")
+                print(self.FAIL + whoCalledFileName + ":" + self.ORDINARY + "ValueError")
 
+    def colorIndex(self, whoCalledFileName):
+        for i in self.whoCalledFileNameList:
+            if i[1] == whoCalledFileName:
+                return self.colorsList[i[0]][1]
 
+    def turnON_OFF(self, flg = True):
+        #  not possible to make func from it (return folder of this func)
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
+        whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
+        whoCalledFileName = whoCalledFileName_TMP[-1]
+        if flg == True:
+            print(self.FAIL + whoCalledFileName + ":", "Debugging is turned ON!", self.ORDINARY)
+        else:
+            print(self.FAIL + whoCalledFileName + ":", "Debugging is turned OFF!", self.ORDINARY)
+        self.fDEBUG = flg
 
+if __name__ == "__main__":
 
+    D = Debug.getInstance()
+    D.log("lolo", "jdjdnc", "12354")
 
+    d = Debug.getInstance()
+    d.log("koko", "lol")
 
-
-
-# if __name__ == "__main__":
-
-#     d = Debug(True)
-
-#     # d.log(d.WARNING + "Lolo", "KO")
-#     d.log("lololo", "kjdf")
+    # D.turnON_OFF(False)  # turn OFF (default is ON)
+    # D.turnON_OFF(True)  # turn ON
 
