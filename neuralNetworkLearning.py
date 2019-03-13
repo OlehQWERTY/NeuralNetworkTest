@@ -49,24 +49,23 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	tmpList1 = []
 	for key, val in countedList.items():  # return one key of element with max val
 		if val == maxValues:
-			D.log(numb123, "_______________________")
-			D.log("network:", key, "detected:", val)
-			global preTime1
-			D.log("Iter Time:", time.time() - preTime1)
-			D.log("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 			rightNetworkSumValuesMaxList.append(key)
 
+	D.log("network[" + '\033[92m' + str(key) + '\033[0m' + ']' + ',', "detected:", '\033[95m' + str(val))
+	global preTime1
+	D.log("Iter Time:", time.time() - preTime1)
+	# D.log("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 	for i in rightNetworkSumValuesMaxList:
-		tmpList1.append(rightNetworkSumValuesList[i])
-		D.log("best ammong sumQualityNetworks:", rightNetworkSumValuesList[i])  # best ammong sumQualityNetwork
-
+		tmpList1.append(rightNetworkSumValuesList[i])  # best ammong sumQualityNetwork
+		
 	tmp123 = extrameListVal(tmpList1, False)  # return index of max element
-	D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
+	D.log("best sumQualityNetworks:", max(tmpList1))  
+	# D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 
 
-def networkLearning(iterationAmmount = 10):
+def networkLearning(iterationAmmount = 100):
 	
 	global iterAmm  # only for progress bar
 	iterAmm = iterationAmmount
@@ -78,17 +77,18 @@ def networkLearning(iterationAmmount = 10):
 
 	# imgNamesList = ["a_1.png", "a_2.png", "b_1.png", "b_2.png", "c_1.png", "c_2.png", "d_1.png", "d_2.png"]  # test
 
+	D.log(imgNamesList)
+
 	images = []
 	MutantNetwork = None
 
 	for n in imgNamesList:
 		images.append([n[0], imgLogic(n)])
-		D.log(n)
 
 	for i in range(iterationAmmount):
 		global currentIter  # only for progress bar
 		currentIter = i
-		D.log("current progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
+		D.log("current progress [" + str(numb123) + "]:", str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 
 		res = None
 		while res is None:
@@ -119,7 +119,16 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 10):
 
 preTime1 = time.time()
 TrainedNetwork = copyObjNetwork(networkLearning(10))
+
 # add save to file func()
+# add save res to xcel file
+
+# 	  a_1   a_2   a_3
+# a   0.1   ...
+# b   0.2   ...
+# c   0.3   ...
+# d   0.4   ...
+
 print("GEN Time:", time.time() - preTime1)
 D.log("___ TEST FOR BEST NETWORK! ___")
 networkTest(TrainedNetwork)
