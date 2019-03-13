@@ -111,9 +111,8 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 10):
 		for m in range(iterationAmmount):
 			D.log(n, "iter:", m)
 			pixels = imgLogic(n)
-			tmp1.changeInputVals(pixels)
-			tmp1.showOutputNeurones()
-
+			NeuralNetwork.changeInputVals(pixels)
+			NeuralNetwork.showOutputNeurones()
 
 
 #########################################################################################################
