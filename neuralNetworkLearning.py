@@ -8,6 +8,10 @@ from collections import Counter
 from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug
 D = Debug.getInstance()  # get debug obj
 
+# test
+from saveNeuralNetwork import Settings
+S = Settings("test.dat")
+
 currentIter = 0  # only for progress bar
 numb123 = 0
 
@@ -16,7 +20,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	global numb123
 	numb123 += 1 # it counter
 	rightNetworkList = []
-	rightNetworkSumValuesList = []  # not tested
+	rightNetworkSumValuesList = []
 	for i in range(8):  # 8 random weight networks
 
 		if PrevIterNeuralNetwork is None:
@@ -24,7 +28,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 		else:
 				Network = copyObjNetwork(PrevIterNeuralNetwork)
 				if i != 0:
-					Network.mutation(0.1, 0.1)  # test
+					Network.mutation(0.1, 0.1)
 
 		sumQualityNetwork = 0
 		# all photos send to neural network
@@ -75,7 +79,7 @@ def networkLearning(iterationAmmount = 100):
 	"c_1.png", "c_2.png", "c_3.png", "c_4.png", "c_5.png", "c_6.png", "c_7.png", "c_8.png", "c_9.png", "c_10.png", \
 	"d_1.png", "d_2.png", "d_3.png", "d_4.png", "d_5.png", "d_6.png", "d_7.png", "d_8.png", "d_9.png", "d_10.png"]
 
-	# imgNamesList = ["a_1.png", "a_2.png", "b_1.png", "b_2.png", "c_1.png", "c_2.png", "d_1.png", "d_2.png"]  # test
+	# imgNamesList = ["a_1.png", "a_2.png", "b_1.png", "b_2.png", "c_1.png", "c_2.png", "d_1.png", "d_2.png"]
 
 	D.log(imgNamesList)
 
@@ -118,7 +122,7 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 10):
 #########################################################################################################
 
 preTime1 = time.time()
-TrainedNetwork = copyObjNetwork(networkLearning(10))
+TrainedNetwork = copyObjNetwork(networkLearning(4))
 
 # add save to file func()
 # add save res to xcel file
@@ -132,3 +136,12 @@ TrainedNetwork = copyObjNetwork(networkLearning(10))
 print("GEN Time:", time.time() - preTime1)
 D.log("___ TEST FOR BEST NETWORK! ___")
 networkTest(TrainedNetwork)
+
+# S.save(TrainedNetwork)  # create an empty file for dbDataProc.py save
+# print(S.load())
+
+# Needs to test
+S.save(TrainedNetwork)  # create an empty file for dbDataProc.py save
+neuralNetworkSerialized = S.load()
+D.log("Coppied neural network")
+neuralNetworkSerialized.showOutputNeurones()
