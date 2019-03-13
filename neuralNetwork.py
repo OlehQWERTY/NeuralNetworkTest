@@ -2,6 +2,9 @@ import neuron
 import operator  # for max in dict
 import copy
 import random
+from utility import Debug
+D = Debug.getInstance()  # get debug obj
+
 
 class NeuralNetwork:
 	genAmmount = 0
@@ -65,7 +68,7 @@ class NeuralNetwork:
 					if currentLayer != 0:  # recalc val for all neurones (exept 0 level (they == img data)). Weight leaves the same.
 						self.layers[currentLayer][neuron].countValue()
 		else:
-			print("changeInputVals (NeuralNetwork):", "not appropriate network!")  # copy error msg func (flask prj) or write new decorated one
+			D.log("changeInputVals (NeuralNetwork):", "not appropriate network!")  # copy error msg func (flask prj) or write new decorated one
 			return None
 
 	def mutation(self, percentage = 0.01, val = 0.01):  # percentage in range 0 - 100 %
@@ -112,7 +115,7 @@ class NeuralNetwork:
 		theBiggestValKey = max(tempArr.items(), key=operator.itemgetter(1))[0]
 		maxKeyAndVal = [theBiggestValKey, tempArr[theBiggestValKey]]
 		if not silent:
-			print("Res[", self.numb, "]:", maxKeyAndVal)
+			D.log("Res[", self.numb, "]:", maxKeyAndVal)
 		return(maxKeyAndVal)
 
 	def outputResQuality(self, expectedRes):
@@ -123,7 +126,7 @@ class NeuralNetwork:
 			tempArr[lettersArr[neuron]] = self.layers[len(self.layersInfo) - 1][neuron].value
 			suma += self.layers[len(self.layersInfo) - 1][neuron].value  # sum of all values (a, b, c, d)
 		return tempArr[expectedRes]/suma
-		# print(tempArr)
+		# D.log(tempArr)
 
 	def returnLayers(self):
 		return copy.deepcopy(self.layers)
@@ -134,7 +137,7 @@ class NeuralNetwork:
 	@staticmethod
 	def howMany(silent = False):
 		if not silent:
-			print('NeuralNetwork\'s ammount {0:d}.'.format(NeuralNetwork.genAmmount))
+			D.log('NeuralNetwork\'s ammount {0:d}.'.format(NeuralNetwork.genAmmount))
 		return NeuralNetwork.genAmmount
 
 # from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug

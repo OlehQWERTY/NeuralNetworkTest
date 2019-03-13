@@ -1,5 +1,7 @@
 import math
 import random
+from utility import Debug
+D = Debug.getInstance()  # get debug obj
 
 class Neuron:
 	
@@ -44,11 +46,10 @@ class Neuron:
 	@staticmethod
 	def howMany(silent = False):
 		if not silent:
-			print('Neuron\'s ammount {0:d}.'.format(Neuron.genAmmount))
+			D.log('Neuron\'s ammount {0:d}.'.format(Neuron.genAmmount))
 		return Neuron.genAmmount
 
 	def info(self):
-		print("Hello, I'm #", self.numb)
-		print("come to you from layer #", self.layer)
-		print("value[", self.numb, ']:', self.value)
-		print("\n")
+		D.log("Hello, I'm #", self.numb)
+		D.log("come to you from layer #", self.layer)
+		D.log("value[", self.numb, ']:', self.value, "\n")
