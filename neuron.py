@@ -49,6 +49,9 @@ class Neuron:
 			D.log('Neuron\'s ammount {0:d}.'.format(Neuron.genAmmount))
 		return Neuron.genAmmount
 
+	def shortInfo(self):
+		D.log("value[", self.numb, ']:', self.value, "\n")
+
 	def info(self):
 		D.log("Hello, I'm #", self.numb)
 		D.log("come to you from layer #", self.layer)

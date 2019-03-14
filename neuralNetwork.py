@@ -104,7 +104,8 @@ class NeuralNetwork:
 
 	def showOutputNeurones(self):
 		for neuronInstance in self.layers[len(self.layersInfo) - 1]:  # show last layer
-			neuronInstance.info()
+			# neuronInstance.info()
+			neuronInstance.shortInfo()
 
 	def showChosenLetter(self, silent = True):
 		# temp to show a, b, c, d
