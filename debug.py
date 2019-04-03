@@ -183,12 +183,28 @@ class Debug:
         else:
             return None
 
-
+    # not tested yet 03/04/19
     def setTmpLog(self, outTmpLogDat):  # load somwhere out, give it here
-        pass  # finish it
+        #  not possible to make func from it (return folder of this func)
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
+        whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
+        whoCalledFileName = whoCalledFileName_TMP[-1]
+
+        timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+        self.tmpLogDat = outTmpLogDat  # it is possible to load data in any fDEBUG state
+        if self.fDEBUG == True:
+            # self.tmpLogDat = outTmpLogDat  # it is possible to load data only if debugging is turned ON
+            self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!")
+
+            if self.fSILENT == False:
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!", self.ORDINARY)
+
 
     def showTmpLog(self):
         pass  # display it coloured
+
 
     #  clear after saving, manualy because it is possible to fault with saving
     def clearTmpLog(self):
