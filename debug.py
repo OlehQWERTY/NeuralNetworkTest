@@ -9,6 +9,8 @@
 #  D.turnON_OFF(False)  # turn OFF
 
 import inspect  # required to get caller script file's name
+import time
+import datetime
 
 class Debug:
     # colours for messages
@@ -57,17 +59,23 @@ class Debug:
     ]
 
     fDEBUG = True
+    fSILENT = False
     whoCalledFileNameList = []
     newFileNumb = 1
+    tmpLogDat = []  # save log history until it'll be cleared by someone from out
 
     __instance = None
     __linesList = []
+
+
     @staticmethod 
     def getInstance():
         """ Static access method. """
         if Debug.__instance == None:
             Debug()
         return Debug.__instance
+
+
     def __init__(self):
         """ Virtually private constructor. """
         if Debug.__instance != None:
@@ -81,7 +89,9 @@ class Debug:
         whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
         whoCalledFileName = whoCalledFileName_TMP[-1]
 
-        print(self.FAIL + whoCalledFileName + ":", "Debugging is turned ON by constructor!", self.ORDINARY)
+        timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+        self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!")
+        print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!", self.ORDINARY)
  
 
     def log(self, *args, **kwargs):
@@ -104,34 +114,85 @@ class Debug:
                         tmp += str(i) + ' '
 
                     # print(self.OKBLUE + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
-                    print(self.colorIndex(whoCalledFileName) + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
+                    timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+                    self.tmpLog(whoCalledFileName  + "[" + timestr + "]: " + tmp[:-1])
+                    if not self.fSILENT:
+                        print(self.colorIndex(whoCalledFileName) + whoCalledFileName  + "[" + timestr + "]:" + self.ORDINARY, tmp[:-1])
                 return self.fDEBUG
             except TypeError:  # not possible to convert to str() (e.x. [list])
-               # do something with None here 
-                tmp = ""
-                for i in args:
-                    tmp += i + ' '
-                print(self.colorIndex(whoCalledFileName) + whoCalledFileName + ":", self.ORDINARY, tmp[:-1])
-            except ValueError:
-                print(self.FAIL + whoCalledFileName + ":" + self.ORDINARY + "ValueError")
+                timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+                self.tmpLog(whoCalledFileName + "[" + timestr + "]:" + "ValueTypeError")
 
-    def colorIndex(self, whoCalledFileName):
+                if not self.fSILENT:                    
+                    print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueTypeError")
+            except ValueError:
+                timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+                self.tmpLog(whoCalledFileName + "[" + timestr + "]:" + "ValueError")
+
+                if not self.fSILENT:
+                    print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueError")
+
+
+    def colorIndex(self, whoCalledFileName):  # different color for different files
         for i in self.whoCalledFileNameList:
             if i[1] == whoCalledFileName:
                 return self.colorsList[i[0]][1]
 
-    def turnON_OFF(self, flg = True):
+
+    def turnON_OFF(self, flg = True, silent = False):
         #  not possible to make func from it (return folder of this func)
         frame = inspect.stack()[1]
         module = inspect.getmodule(frame[0])
         tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
         whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
         whoCalledFileName = whoCalledFileName_TMP[-1]
+
+        timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
         if flg == True:
-            print(self.FAIL + whoCalledFileName + ":", "Debugging is turned ON!", self.ORDINARY)
+            if silent == True:
+                self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!")
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!", self.ORDINARY)
+            else:
+                self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!")
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!", self.ORDINARY)
+            self.fSILENT = silent
         else:
-            print(self.FAIL + whoCalledFileName + ":", "Debugging is turned OFF!", self.ORDINARY)
+            self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!")
+            print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!", self.ORDINARY)
         self.fDEBUG = flg
+
+
+    #  log data storage
+    def tmpLog(self, *args, **kwargs):
+        # critical log
+        # warning log
+        # ...
+        # regular outputs
+
+        tmp = ""
+        for i in args:
+            tmp += str(i) + ' '
+
+        self.tmpLogDat.append(tmp)
+
+
+    #  if it is needed save it whenever
+    def getTmpLog(self):
+        if self.tmpLogDat:
+            return self.tmpLogDat
+        else:
+            return None
+
+
+    def setTmpLog(self, outTmpLogDat):  # load somwhere out, give it here
+        pass  # finish it
+
+    def showTmpLog(self):
+        pass  # display it coloured
+
+    #  clear after saving, manualy because it is possible to fault with saving
+    def clearTmpLog(self):
+        self.tmpLogDat.clear()
 
 if __name__ == "__main__":
 
@@ -142,5 +203,16 @@ if __name__ == "__main__":
     d.log("koko", "lol")
 
     # D.turnON_OFF(False)  # turn OFF (default is ON)
-    # D.turnON_OFF(True)  # turn ON
+    # D.turnON_OFF(True, True)  # turn ON in silent mode
+    # D.turnON_OFF(True, False)  # turn ON in normal mode
+
+    print("getTmpLog:")
+    print(d.getTmpLog())
+    D.clearTmpLog()
+    d.log("58975", [12, "lo"], {"key": "val"})
+
+    print("getTmpLog:")
+    print(d.getTmpLog())
+
+    
 
