@@ -179,11 +179,11 @@ class Debug:
     #  if it is needed save it whenever
     def getTmpLog(self):
         if self.tmpLogDat:
-            return self.tmpLogDat
+            return self.tmpLogDat.copy()
         else:
             return None
 
-    # not tested yet 03/04/19
+
     def setTmpLog(self, outTmpLogDat):  # load somwhere out, give it here
         #  not possible to make func from it (return folder of this func)
         frame = inspect.stack()[1]
@@ -193,9 +193,9 @@ class Debug:
         whoCalledFileName = whoCalledFileName_TMP[-1]
 
         timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-        self.tmpLogDat = outTmpLogDat  # it is possible to load data in any fDEBUG state
+        self.tmpLogDat = outTmpLogDat.copy()  # it is possible to load data in any fDEBUG state
         if self.fDEBUG == True:
-            # self.tmpLogDat = outTmpLogDat  # it is possible to load data only if debugging is turned ON
+            # self.tmpLogDat = outTmpLogDat.copy()  # it is possible to load data only if debugging is turned ON
             self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!")
 
             if self.fSILENT == False:
@@ -222,13 +222,25 @@ if __name__ == "__main__":
     # D.turnON_OFF(True, True)  # turn ON in silent mode
     # D.turnON_OFF(True, False)  # turn ON in normal mode
 
-    print("getTmpLog:")
-    print(d.getTmpLog())
-    D.clearTmpLog()
+    # print("getTmpLog:")
+    # print(d.getTmpLog())
+    # D.clearTmpLog()
     d.log("58975", [12, "lo"], {"key": "val"})
 
     print("getTmpLog:")
+    test1 = d.getTmpLog()
+    print(test1)
+
+    print("clearTmpLog:")
+    D.clearTmpLog()
+    print("getTmpLog:")
     print(d.getTmpLog())
+
+    print("setTmpLog:")
+    D.setTmpLog(test1)
+    print("getTmpLog:")
+    print(d.getTmpLog())
+
 
     
 
