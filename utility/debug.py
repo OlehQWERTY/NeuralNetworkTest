@@ -190,6 +190,9 @@ class Debug:
                 return self.logData["msg"].copy()  # return list
             else:
                 # error not correct log type
+                timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+                self.tmpLog("error", "debug.py" + "[" + timestr + "]:", "getTmpLog wrong type!")
+                print(self.FAIL + "debug.py" + "[" + timestr + "]:", "getTmpLog wrong type!" + self.ORDINARY)
                 return None
         else:
             return None
@@ -204,16 +207,12 @@ class Debug:
         whoCalledFileName = whoCalledFileName_TMP[-1]
 
         timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-        self.logData = logData.copy()  # it is possible to load data in any fDEBUG state
+        self.logData = outLogData.copy()  # it is possible to load data in any fDEBUG state
         if self.fDEBUG == True:
             self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!")
 
             if self.fSILENT == False:
                 print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!" + self.ORDINARY)
-
-
-    def showTmpLog(self):
-        pass  # display it coloured
 
 
     #  clear after saving, manualy because it is possible to fault with saving
@@ -257,7 +256,3 @@ if __name__ == "__main__":
     # print(D.getTmpLog())
 
     # print(D.FAIL, D.getTmpLog("sys"), D.ORDINARY)
-
-
-    
-

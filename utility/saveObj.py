@@ -1,9 +1,8 @@
 import sys, os
 import pickle  # serializer/deserializer
-from utility import Debug
+from debug import Debug  # if utility import - crossing links with utility.py
 # sys.path.append('../models')
 D = Debug.getInstance()
-D.log("___ TEST FOR BEST NETWORK! ___")
 
 class SaveObj():
     def __init__(self, path):
@@ -34,17 +33,10 @@ class SaveObj():
             pickle.dump(data, f)
         D.log("Object was saved successfully...")
 
-    # def parse(self):
-    #     if self.data_new is not None:
-    #         pass
-
-    # def __del__(self):
-    #     D.log("Settings is closed!")
-    #     sleep(2)
 
 
 if __name__ == '__main__':  # call only if this module is called independently
-    Set = Settings("test.dat")
+    Set = SaveObj("testSaveObj.dat")
 
     # data = {
     #     'cam': [0, 640, 480],

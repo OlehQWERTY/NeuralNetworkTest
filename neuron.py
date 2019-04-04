@@ -1,5 +1,7 @@
 import math
 import random
+import sys
+sys.path.append('./utility')
 from utility import Debug
 D = Debug.getInstance()  # get debug obj
 

@@ -5,6 +5,8 @@ import copy  # importing "copy" for copy operations
 import time
 from collections import Counter
 # import msgRenuvable 
+import sys
+sys.path.append('./utility')
 from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug, SaveObj
 D = Debug.getInstance()  # get debug obj
 # test

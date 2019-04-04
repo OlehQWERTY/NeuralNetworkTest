@@ -1,6 +1,7 @@
 from debug import Debug
+D = Debug.getInstance()
 from saveObj import SaveObj  # serialize / deserialize obj to/from json
-
+LogDump = SaveObj("test.dat")
 # ammount of signs after .
 def toFixed(numObj, digits=0):
     return f"{numObj:.{digits}f}"
@@ -41,6 +42,31 @@ def imgLogic(imgName = None):
 	# print(pixels)
 	return pixels
 
+def log(*args, **kwargs):
+	tmp = ""
+	for i in args:
+		tmp += str(i) + ' '
+
+	D = Debug.getInstance()
+	D.log(tmp)
+
+
+def logSave():
+	LogDump.save(D.getTmpLog())  # create an empty file for dbDataProc.py save
+
+
+def logRestore():
+	D.setTmpLog(LogDump.load())
+
+
+def logClear():
+	D.clearTmpLog()
+
+
+def getTmpLog(type = "all"):
+	return D.getTmpLog(type)
+
+
 # memory histogram
 
 # from pympler.tracker import SummaryTracker
@@ -49,3 +75,12 @@ def imgLogic(imgName = None):
 # funcForTesting()
 
 # tracker.print_diff()
+
+if __name__ == '__main__':  # call only if this module is called independently
+	D = Debug.getInstance()
+	D.log("1111", [56859, "6lokdjncdj"], {"poiu": "dnkcjdnk"})
+
+	logSave()
+	logClear()
+	logRestore()
+	print(getTmpLog())

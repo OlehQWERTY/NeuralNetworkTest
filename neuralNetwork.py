@@ -2,6 +2,8 @@ import neuron
 import operator  # for max in dict
 import copy
 import random
+import sys
+sys.path.append('./utility')
 from utility import Debug
 D = Debug.getInstance()  # get debug obj
 
