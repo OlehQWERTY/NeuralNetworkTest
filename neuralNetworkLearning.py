@@ -66,6 +66,12 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	D.log("best sumQualityNetworks:", max(tmpList1))  
 	# D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
+	### crutch 04 04 19
+	import datetime
+	timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
+	bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
+	bestS.save(NetworkList[bestNeuralNetworkNumber])
+	### crutch
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 
 
@@ -133,7 +139,7 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 1):
 #########################################################################################################
 
 preTime1 = time.time()
-TrainedNetwork = copyObjNetwork(networkLearning(100))
+TrainedNetwork = copyObjNetwork(networkLearning(1000))
 
 # add save to file func()
 # add save res to xcel file
