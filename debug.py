@@ -1,13 +1,3 @@
-#  from debug import Debug
-
-#  class is singleton!!!
-
-#  D = Debug.getInstance(True)
-
-#  D.log("lolo", "jdjdnc", "12354")
-
-#  D.turnON_OFF(False)  # turn OFF
-
 import inspect  # required to get caller script file's name
 import time
 import datetime
@@ -262,11 +252,6 @@ if __name__ == "__main__":
     # D.setTmpLog(test1)
     print("getTmpLog:")
     print(d.getTmpLog())
-
-
-
-    # D.logData["error"].append("154789546448484849848+")
-    # print(D.logData)
 
 
     # print(D.getTmpLog())
