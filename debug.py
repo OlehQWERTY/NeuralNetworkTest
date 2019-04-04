@@ -17,7 +17,6 @@ class Debug:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
     ORANGE = '\033[33m'
     BLUE = '\033[34m'
     PURPLE = '\033[35m'
@@ -32,6 +31,7 @@ class Debug:
     LIGHTCYAN = '\033[96m'
     # reserved for error and sys msg only
     FAIL = '\033[91m'
+    WARNING = '\033[93m'
     # Don't work on Windows
     ENDC = '\033[0m'  
     BOLD = '\033[1m'
@@ -43,7 +43,6 @@ class Debug:
         ["HEADER", '\033[95m'],
         ["OKBLUE", '\033[94m'],
         ["OKGREEN", '\033[92m'],
-        ["WARNING", '\033[93m'],
         ["ORANGE", '\033[33m'],
         ["BLUE", '\033[34m'],
         ["PURPLE", '\033[35m'],
@@ -62,7 +61,11 @@ class Debug:
     fSILENT = False
     whoCalledFileNameList = []
     newFileNumb = 1
-    tmpLogDat = []  # save log history until it'll be cleared by someone from out
+    logData = {"error": [], \
+        "critical_error": [], \
+        "sys": [], \
+        "warning": [], \
+        "msg": []}
 
     __instance = None
     __linesList = []
@@ -90,8 +93,8 @@ class Debug:
         whoCalledFileName = whoCalledFileName_TMP[-1]
 
         timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-        self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!")
-        print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!", self.ORDINARY)
+        self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!")
+        print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON by constructor!" + self.ORDINARY)
  
 
     def log(self, *args, **kwargs):
@@ -115,19 +118,19 @@ class Debug:
 
                     # print(self.OKBLUE + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
                     timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-                    self.tmpLog(whoCalledFileName  + "[" + timestr + "]: " + tmp[:-1])
+                    self.tmpLog("msg", whoCalledFileName  + "[" + timestr + "]: " + tmp[:-1])
                     if not self.fSILENT:
                         print(self.colorIndex(whoCalledFileName) + whoCalledFileName  + "[" + timestr + "]:" + self.ORDINARY, tmp[:-1])
                 return self.fDEBUG
             except TypeError:  # not possible to convert to str() (e.x. [list])
                 timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-                self.tmpLog(whoCalledFileName + "[" + timestr + "]:" + "ValueTypeError")
+                self.tmpLog("error", whoCalledFileName + "[" + timestr + "]:" + "ValueTypeError")
 
                 if not self.fSILENT:                    
                     print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueTypeError")
             except ValueError:
                 timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-                self.tmpLog(whoCalledFileName + "[" + timestr + "]:" + "ValueError")
+                self.tmpLog("error", whoCalledFileName + "[" + timestr + "]:" + "ValueError")
 
                 if not self.fSILENT:
                     print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueError")
@@ -150,41 +153,59 @@ class Debug:
         timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
         if flg == True:
             if silent == True:
-                self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!")
-                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!", self.ORDINARY)
+                self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!")
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in silent mode!" + self.ORDINARY)
             else:
-                self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!")
-                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!", self.ORDINARY)
+                self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!")
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned ON in normal mode!" + self.ORDINARY)
             self.fSILENT = silent
         else:
-            self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!")
-            print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!", self.ORDINARY)
+            self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!")
+            print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "Debugging is turned OFF!" + self.ORDINARY)
         self.fDEBUG = flg
 
 
     #  log data storage
-    def tmpLog(self, *args, **kwargs):
-        # critical log
-        # warning log
-        # ...
-        # regular outputs
-
+    def tmpLog(self, type = "msg", *args, **kwargs):  # type error, critical_error, warning, msg
         tmp = ""
         for i in args:
             tmp += str(i) + ' '
 
-        self.tmpLogDat.append(tmp)
+        if type == "error":
+            self.logData["error"].append(tmp)
+        elif type == "critical_error":
+            self.logData["critical_error"].append(tmp)
+        elif type == "warning":
+            self.logData["warning"].append(tmp)
+        elif type == "sys":
+            self.logData["sys"].append(tmp)
+        if type == "msg":
+            self.logData["msg"].append(tmp)
 
 
     #  if it is needed save it whenever
-    def getTmpLog(self):
-        if self.tmpLogDat:
-            return self.tmpLogDat.copy()
+    def getTmpLog(self, type = "all"):  # type error, warning, msg, all
+        if self.logData:
+            if type == "all":
+                return self.logData.copy()  # return dict
+            elif type == "error":
+                return self.logData["error"].copy()  # return list
+            elif type == "critical_error":
+                return self.logData["critical_error"].copy()  # return list
+            elif type == "warning":
+                return self.logData["warning"].copy()  # return list
+            elif type == "sys":
+                return self.logData["sys"].copy()  # return list
+            elif type == "msg":
+                return self.logData["msg"].copy()  # return list
+            else:
+                # error not correct log type
+                return None
         else:
             return None
 
 
-    def setTmpLog(self, outTmpLogDat):  # load somwhere out, give it here
+    def setTmpLog(self, outLogData):  # load somwhere out, give it here
         #  not possible to make func from it (return folder of this func)
         frame = inspect.stack()[1]
         module = inspect.getmodule(frame[0])
@@ -193,13 +214,12 @@ class Debug:
         whoCalledFileName = whoCalledFileName_TMP[-1]
 
         timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
-        self.tmpLogDat = outTmpLogDat.copy()  # it is possible to load data in any fDEBUG state
+        self.logData = logData.copy()  # it is possible to load data in any fDEBUG state
         if self.fDEBUG == True:
-            # self.tmpLogDat = outTmpLogDat.copy()  # it is possible to load data only if debugging is turned ON
-            self.tmpLog(whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!")
+            self.tmpLog("sys", whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!")
 
             if self.fSILENT == False:
-                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!", self.ORDINARY)
+                print(self.FAIL + whoCalledFileName + "[" + timestr + "]:", "TmpLog was set!" + self.ORDINARY)
 
 
     def showTmpLog(self):
@@ -208,7 +228,9 @@ class Debug:
 
     #  clear after saving, manualy because it is possible to fault with saving
     def clearTmpLog(self):
-        self.tmpLogDat.clear()
+        for key in self.logData.keys():
+            # print(self.logData[key])
+            self.logData[key].clear()
 
 if __name__ == "__main__":
 
@@ -233,13 +255,23 @@ if __name__ == "__main__":
 
     print("clearTmpLog:")
     D.clearTmpLog()
+    # print("getTmpLog:")
+    # print(d.getTmpLog())
+
+    # print("setTmpLog:")
+    # D.setTmpLog(test1)
     print("getTmpLog:")
     print(d.getTmpLog())
 
-    print("setTmpLog:")
-    D.setTmpLog(test1)
-    print("getTmpLog:")
-    print(d.getTmpLog())
+
+
+    # D.logData["error"].append("154789546448484849848+")
+    # print(D.logData)
+
+
+    # print(D.getTmpLog())
+
+    # print(D.FAIL, D.getTmpLog("sys"), D.ORDINARY)
 
 
     
