@@ -6,8 +6,17 @@ import time
 from collections import Counter
 # import msgRenuvable 
 import sys
+
+if sys.version_info > (3, 0):
+	pass
+	# Python 3 code in this block
+else:
+	print("Please restart it with python version 3...")
+	sys.exit()
+	# Python 2 code in this block
+
 sys.path.append('./utility')
-from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug, SaveObj
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug, SaveObj, ls
 D = Debug.getInstance()  # get debug obj
 # test
 S = SaveObj("test.dat")
@@ -28,7 +37,8 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 		else:
 				Network = copyObjNetwork(PrevIterNeuralNetwork)
 				if i != 0:
-					Network.mutation(0.1, 0.1)
+					# Network.mutation(0.1, 0.1)
+					Network.mutation(0.1, 0.2)
 
 		sumQualityNetwork = 0
 		# all photos send to neural network
@@ -67,10 +77,11 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	# D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 	### crutch 04 04 19
-	import datetime
-	timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
-	bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
-	bestS.save(NetworkList[bestNeuralNetworkNumber])
+	if val > 15:  # ssd saving
+		import datetime
+		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
+		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
+		bestS.save(NetworkList[bestNeuralNetworkNumber])
 	### crutch
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 
@@ -127,35 +138,71 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 1):
 	"a_6.png", "b_6.png", "c_6.png", "d_6.png", "a_7.png", "b_7.png", "c_7.png", "d_7.png", "a_8.png", "b_8.png", "c_8.png", "d_8.png", \
 	"a_9.png", "b_9.png", "c_9.png", "d_9.png", "a_10.png", "b_10.png", "c_10.png", "d_10.png"]
 
-
+	percentageForOne = 100.0 / len(imgNamesList)
+	getPercentage = 0
+	getPercentageA = 0
+	getPercentageB = 0
+	getPercentageC = 0
+	getPercentageD = 0
 	for n in imgNamesList:
 		for m in range(iterationAmmount):
-			D.log(n, "iter:", m)
+
+			# D.log(n, "iter:", m)
+			
 			pixels = imgLogic(n)
 			NeuralNetwork.changeInputVals(pixels)
-			NeuralNetwork.showOutputNeurones()
+
+			# NeuralNetwork.showOutputNeurones()
+
+			best = NeuralNetwork.showChosenLetter()
+			if n[0] == best[0]:
+				# print(True)
+				getPercentage += percentageForOne
+				if n[0] == "a":
+					getPercentageA += percentageForOne
+				elif n[0] == "b":
+					getPercentageB += percentageForOne
+				elif n[0] == "c":
+					getPercentageC += percentageForOne
+				elif n[0] == "d":
+					getPercentageD += percentageForOne
+			# NeuralNetwork.showChosenLetter(False)  # silent False
+	print("Detected %:", getPercentage)
+	print("a:", getPercentageA, "b:", getPercentageB, "c:", getPercentageC, "d:", getPercentageD)
+
 
 
 #########################################################################################################
-
+# learning
 preTime1 = time.time()
 TrainedNetwork = copyObjNetwork(networkLearning(1000))
-
-# add save to file func()
-# add save res to xcel file
-
-# 	  a_1   a_2   a_3
-# a   0.1   ...
-# b   0.2   ...
-# c   0.3   ...
-# d   0.4   ...
-
 print("GEN Time:", time.time() - preTime1)
+
 D.log("___ TEST FOR BEST NETWORK! ___")
-networkTest(TrainedNetwork, 1)
+
+# test loaded network
+# NetFile = SaveObj("29_2019-04-04 14_53_02_906568.dat")  # 72.5 %
+# NetFile = SaveObj("26_2019-04-05 10_57_45_687029.dat")  # 65.0 %
+# NetFile = SaveObj("16_2019-04-05 10_29_47_830698.dat")  # 52.5 %
+
+# TrainedNetwork = NetFile.load()
+# networkTest(TrainedNetwork, 1)
 
 
-# Needs to test
+
+# autotest
+# strDir = "bestNetworks/experimental"
+# filesList = ls(strDir)
+# # print("ls", ls("bestNetworks/1"))
+# for i in filesList:
+# 	print(strDir + "/" + i)
+# 	NetFile = SaveObj(strDir + "/" + i)  # ? %
+# 	TrainedNetwork = NetFile.load()
+# 	networkTest(TrainedNetwork, 1)
+# 	print("------------")
+
+
+# it works load/save
 # S.save(TrainedNetwork)  # create an empty file for dbDataProc.py save
 # neuralNetworkSerialized = S.load()
 # D.log("Coppied neural network")
