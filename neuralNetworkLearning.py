@@ -77,7 +77,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	# D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 	### crutch 04 04 19
-	if val > 15:  # ssd saving
+	if val > 20:  # ssd saving
 		import datetime
 		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
 		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
