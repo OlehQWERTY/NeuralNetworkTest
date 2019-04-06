@@ -67,6 +67,16 @@ def getTmpLog(type = "all"):
 	return D.getTmpLog(type)
 
 
+# get list of files in folder
+import os 
+def ls(directory = None):
+	if directory: 
+		files = os.listdir(directory)
+		return files
+	else:
+		return None
+
+
 # memory histogram
 
 # from pympler.tracker import SummaryTracker
