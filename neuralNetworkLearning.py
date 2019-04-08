@@ -16,13 +16,16 @@ else:
 	# Python 2 code in this block
 
 sys.path.append('./utility')
-from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, Debug, SaveObj, ls
-D = Debug.getInstance()  # get debug obj
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, log, SaveObj, ls, TCom
+
 # test
 S = SaveObj("test.dat")
+# telegram notifier usage
+# TCom.send("Hi")
 
 currentIter = 0  # only for progress bar
 numb123 = 0
+bestDetected = 0  # score of the best NeuralNetwork
 
 def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = None):
 	NetworkList = []
@@ -65,24 +68,33 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 		if val == maxValues:
 			rightNetworkSumValuesMaxList.append(key)
 
-	D.log("network[" + '\033[92m' + str(key) + '\033[0m' + ']' + ',', "detected:", '\033[95m' + str(val))
+	log("network[" + '\033[92m' + str(key) + '\033[0m' + ']' + ',', "detected:", '\033[95m' + str(val))
 	global preTime1
-	D.log("Iter Time:", time.time() - preTime1)
+	log("Iter Time:", time.time() - preTime1)
 	# D.log("progress: " + str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 	for i in rightNetworkSumValuesMaxList:
 		tmpList1.append(rightNetworkSumValuesList[i])  # best ammong sumQualityNetwork
 		
 	tmp123 = extrameListVal(tmpList1, False)  # return index of max element
-	D.log("best sumQualityNetworks:", max(tmpList1))  
-	# D.log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
+	log("best sumQualityNetworks:", max(tmpList1))  
+	# log("index:", rightNetworkSumValuesList.index(tmpList1[tmp123]))
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
+
 	### crutch 04 04 19
-	if val > 20:  # ssd saving
+	if val > 10:  # ssd saving
 		import datetime
 		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
 		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
 		bestS.save(NetworkList[bestNeuralNetworkNumber])
 	### crutch
+
+	# send best score to my telegram
+	global bestDetected
+	if bestDetected < val:
+		bestDetected = val
+		log("New best result:", bestDetected)
+		TCom.send("New best result: " + str(bestDetected))
+
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 
 
@@ -113,7 +125,7 @@ def networkLearning(iterationAmmount = 100):
 
 	# imgNamesList = ["a_1.png", "a_2.png", "b_1.png", "b_2.png", "c_1.png", "c_2.png", "d_1.png", "d_2.png"]
 
-	D.log(imgNamesList)
+	log(imgNamesList)
 
 	images = []
 	MutantNetwork = None
@@ -124,7 +136,7 @@ def networkLearning(iterationAmmount = 100):
 	for i in range(iterationAmmount):
 		global currentIter  # only for progress bar
 		currentIter = i
-		D.log("current progress [" + str(numb123) + "]:", str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
+		log("current progress [" + str(numb123) + "]:", str(toFixed(currentIter/iterAmm * 100, 2)) + '%')
 
 		res = None
 		while res is None:
@@ -157,7 +169,7 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 1):
 	for n in imgNamesList:
 		for m in range(iterationAmmount):
 
-			# D.log(n, "iter:", m)
+			# log(n, "iter:", m)
 			
 			pixels = imgLogic(n)
 			NeuralNetwork.changeInputVals(pixels)
@@ -188,7 +200,7 @@ preTime1 = time.time()
 TrainedNetwork = copyObjNetwork(networkLearning(1000))
 print("GEN Time:", time.time() - preTime1)
 
-D.log("___ TEST FOR BEST NETWORK! ___")
+log("___ TEST FOR BEST NETWORK! ___")
 
 # test loaded network
 # NetFile = SaveObj("29_2019-04-04 14_53_02_906568.dat")  # 72.5 %
@@ -215,5 +227,5 @@ D.log("___ TEST FOR BEST NETWORK! ___")
 # it works load/save
 # S.save(TrainedNetwork)  # create an empty file for dbDataProc.py save
 # neuralNetworkSerialized = S.load()
-# D.log("Coppied neural network")
+# log("Coppied neural network")
 # neuralNetworkSerialized.showOutputNeurones()

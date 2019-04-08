@@ -1,7 +1,18 @@
+# debug is possible to use instead print
 from debug import Debug
 D = Debug.getInstance()
-from saveObj import SaveObj  # serialize / deserialize obj to/from json
+
+
+# telegram notifier
+from tCom import TCom as TComImp
+TCom = TComImp.getInstance()
+
+
+# serialize / deserialize obj to/from json
+from saveObj import SaveObj  
 LogDump = SaveObj("test.dat")
+
+
 # ammount of signs after .
 def toFixed(numObj, digits=0):
     return f"{numObj:.{digits}f}"
@@ -25,8 +36,8 @@ def copyObjNetwork(NetworkObjToCopy, delKey = False):
 	return NetworkCopied
 
 
-import cv2
 # import numpy as np
+import cv2
 def imgLogic(imgName = None):
 	if imgName is None:
 		print("Error: please send imgName!")
@@ -41,6 +52,7 @@ def imgLogic(imgName = None):
 	# print(len(img)*len(img[0]))  # total img pixels ammount
 	# print(pixels)
 	return pixels
+
 
 def log(*args, **kwargs):
 	tmp = ""
