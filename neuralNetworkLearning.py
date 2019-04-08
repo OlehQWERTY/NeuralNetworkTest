@@ -22,10 +22,23 @@ from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, log, warn
 S = SaveObj("test.dat")
 # telegram notifier usage
 # TCom.send("Hi")
+TSilent = False  # don't send me telegram msg about new best score
 
 currentIter = 0  # only for progress bar
 numb123 = 0
 bestDetected = 0  # score of the best NeuralNetwork
+
+
+# telegram msg
+def Tmsg(val):
+	global TSilent
+	if not TSilent:
+		global bestDetected
+		if bestDetected < val:
+			bestDetected = val
+			log("New best result:", bestDetected)
+			TCom.send("New best result: " + str(bestDetected))
+
 
 def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = None):
 	NetworkList = []
@@ -81,7 +94,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 
 	### crutch 04 04 19
-	if val > 20:  # ssd saving
+	if val > 10:  # ssd saving
 		import datetime
 		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
 		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
@@ -89,11 +102,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	### crutch
 
 	# send best score to my telegram
-	global bestDetected
-	if bestDetected < val:
-		bestDetected = val
-		log("New best result:", bestDetected)
-		TCom.send("New best result: " + str(bestDetected))
+	Tmsg(val)
 
 	return copyObjNetwork(NetworkList[bestNeuralNetworkNumber])
 

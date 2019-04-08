@@ -26,6 +26,7 @@ class TCom:
         else:
             TCom.__instance = self
             print("Tcom is started")
+            # commented while debuging
             self.send("New session is started at " + f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}")
 
 
