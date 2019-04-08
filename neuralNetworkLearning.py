@@ -94,7 +94,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 
 	### crutch 04 04 19
-	if val > 10:  # ssd saving
+	if val > 20:  # ssd saving
 		import datetime
 		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
 		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
@@ -203,14 +203,18 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 1):
 
 
 
-#########################################################################################################
+#######################################################################################################################
+
 # learning
 preTime1 = time.time()
-# warning("warning test")
 TrainedNetwork = copyObjNetwork(networkLearning(1000))
 print("GEN Time:", time.time() - preTime1)
 
+# warning("warning test")
+
 log("___ TEST FOR BEST NETWORK! ___")
+
+####
 
 # test loaded network
 # NetFile = SaveObj("29_2019-04-04 14_53_02_906568.dat")  # 72.5 %
@@ -220,7 +224,7 @@ log("___ TEST FOR BEST NETWORK! ___")
 # TrainedNetwork = NetFile.load()
 # networkTest(TrainedNetwork, 1)
 
-
+####
 
 # autotest
 # strDir = "bestNetworks/experimental"
@@ -233,6 +237,7 @@ log("___ TEST FOR BEST NETWORK! ___")
 # 	networkTest(TrainedNetwork, 1)
 # 	print("------------")
 
+####
 
 # it works load/save
 # S.save(TrainedNetwork)  # create an empty file for dbDataProc.py save
