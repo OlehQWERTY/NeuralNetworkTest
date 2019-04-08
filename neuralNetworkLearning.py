@@ -16,7 +16,7 @@ else:
 	# Python 2 code in this block
 
 sys.path.append('./utility')
-from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, log, SaveObj, ls, TCom
+from utility import toFixed, copyObjNetwork, imgLogic, extrameListVal, log, warning, SaveObj, ls, TCom
 
 # test
 S = SaveObj("test.dat")
@@ -81,7 +81,7 @@ def networkLearningIter(PrevIterNeuralNetwork = None, silent = False, images = N
 	bestNeuralNetworkNumber = rightNetworkSumValuesList.index(tmpList1[tmp123])
 
 	### crutch 04 04 19
-	if val > 10:  # ssd saving
+	if val > 20:  # ssd saving
 		import datetime
 		timestr = f"{datetime.datetime.now():%Y-%m-%d %H_%M_%S_%f}"
 		bestS = SaveObj("bestNetworks/" + str(val) + "_" + str(timestr) + ".dat")
@@ -197,6 +197,7 @@ def networkTest(NeuralNetwork = None, iterationAmmount = 1):
 #########################################################################################################
 # learning
 preTime1 = time.time()
+# warning("warning test")
 TrainedNetwork = copyObjNetwork(networkLearning(1000))
 print("GEN Time:", time.time() - preTime1)
 

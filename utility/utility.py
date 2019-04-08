@@ -55,12 +55,28 @@ def imgLogic(imgName = None):
 
 
 def log(*args, **kwargs):
-	tmp = ""
-	for i in args:
-		tmp += str(i) + ' '
+	# D = Debug.getInstance()
+	D.log(*args, **kwargs)
 
-	D = Debug.getInstance()
-	D.log(tmp)
+
+def error(*args, **kwargs):
+	# D = Debug.getInstance()
+	D.error_log(*args, **kwargs)
+
+
+def critical_error(*args, **kwargs):
+	# D = Debug.getInstance()
+	D.critical_error_log(*args, **kwargs)
+
+
+def sys(*args, **kwargs):
+	# D = Debug.getInstance()
+	D.sys_log(*args, **kwargs)
+
+
+def warning(*args, **kwargs):
+	# D = Debug.getInstance()
+	D.warning_log(*args, **kwargs)
 
 
 def logSave():

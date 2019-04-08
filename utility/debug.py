@@ -89,7 +89,9 @@ class Debug:
 
     def log(self, *args, **kwargs):
         if self.fDEBUG:  # DEBUG = True
+
             try:
+
                 #  not possible to make func from it (return folder of this func)
                 frame = inspect.stack()[1]
                 module = inspect.getmodule(frame[0])
@@ -109,21 +111,102 @@ class Debug:
                     # print(self.OKBLUE + whoCalledFileName + ":" + self.ORDINARY, tmp[:-1])
                     timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
                     self.tmpLog("msg", whoCalledFileName  + "[" + timestr + "]: " + tmp[:-1])
+
                     if not self.fSILENT:
                         print(self.colorIndex(whoCalledFileName) + whoCalledFileName  + "[" + timestr + "]:" + self.ORDINARY, tmp[:-1])
                 return self.fDEBUG
+
             except TypeError:  # not possible to convert to str() (e.x. [list])
                 timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
                 self.tmpLog("error", whoCalledFileName + "[" + timestr + "]:" + "ValueTypeError")
 
                 if not self.fSILENT:                    
                     print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueTypeError")
+
             except ValueError:
                 timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
                 self.tmpLog("error", whoCalledFileName + "[" + timestr + "]:" + "ValueError")
 
                 if not self.fSILENT:
                     print(self.FAIL + whoCalledFileName + "[" + timestr + "]:" + self.ORDINARY + "ValueError")
+
+
+    # not protected from wrong data
+    def _log_log(self, *args, **kwargs):
+        #  not possible to make func from it (return folder of this func)
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        tmpWhoCalledFileName = module.__file__  # file name of whoCalled me e.x. neuralNetworkLearning.py
+        whoCalledFileName_TMP = tmpWhoCalledFileName.split('\\')
+        whoCalledFileName = whoCalledFileName_TMP[-1]
+
+        if whoCalledFileName:  # other colour for __main__
+            if whoCalledFileName not in self.whoCalledFileNameList:
+                self.whoCalledFileNameList.append([self.newFileNumb % len(self.colorsList), whoCalledFileName])
+                self.newFileNumb += 1
+
+            tmp = ""
+            for i in args:
+                tmp += str(i) + ' '
+
+            timestr = f"{datetime.datetime.now():%Y-%m-%d %H:%M:%S.%f}"
+
+            return whoCalledFileName, timestr, tmp
+
+        else:
+            return False
+
+    # rewrite if u'll have desire
+    def error_log(self, *args, **kwargs):
+        logLogTmp = self._log_log(*args, **kwargs)
+        if len(logLogTmp) == 3:  # all data is here
+            # logLogTmp consist of ('debug.py', '2019-04-08 13:03:29.630916', 'error_log ')
+            self.tmpLog("error", \
+                logLogTmp[0]  + "[" + logLogTmp[1] + "]: " + logLogTmp[2][:-1])
+
+            if not self.fSILENT:
+                print(self.FAIL + logLogTmp[0]  + "[" + logLogTmp[1] + "]:" + self.ORDINARY, logLogTmp[2][:-1])
+
+            return self.fDEBUG
+
+
+    def critical_error_log(self, *args, **kwargs):
+        logLogTmp = self._log_log(*args, **kwargs)
+        if len(logLogTmp) == 3:  # all data is here
+            # logLogTmp consist of ('debug.py', '2019-04-08 13:03:29.630916', 'error_log ')
+            self.tmpLog("critical_error", \
+                logLogTmp[0]  + "[" + logLogTmp[1] + "]: " + logLogTmp[2][:-1])
+
+            if not self.fSILENT:
+                print(self.FAIL + logLogTmp[0]  + "[" + logLogTmp[1] + "]:" + self.ORDINARY, logLogTmp[2][:-1])
+
+            return self.fDEBUG
+
+
+    def sys_log(self, *args, **kwargs):
+        logLogTmp = self._log_log(*args, **kwargs)
+        if len(logLogTmp) == 3:  # all data is here
+            # logLogTmp consist of ('debug.py', '2019-04-08 13:03:29.630916', 'error_log ')
+            self.tmpLog("sys", \
+                logLogTmp[0]  + "[" + logLogTmp[1] + "]: " + logLogTmp[2][:-1])
+
+            if not self.fSILENT:
+                print(self.FAIL + logLogTmp[0]  + "[" + logLogTmp[1] + "]:" + self.ORDINARY, logLogTmp[2][:-1])
+
+            return self.fDEBUG
+
+
+    def warning_log(self, *args, **kwargs):
+        logLogTmp = self._log_log(*args, **kwargs)
+        if len(logLogTmp) == 3:  # all data is here
+            # logLogTmp consist of ('debug.py', '2019-04-08 13:03:29.630916', 'error_log ')
+            self.tmpLog("warning", \
+                logLogTmp[0]  + "[" + logLogTmp[1] + "]: " + logLogTmp[2][:-1])
+
+            if not self.fSILENT:
+                print(self.WARNING + logLogTmp[0]  + "[" + logLogTmp[1] + "]:" + self.ORDINARY, logLogTmp[2][:-1])
+
+            return self.fDEBUG   
 
 
     def colorIndex(self, whoCalledFileName):  # different color for different files
@@ -161,16 +244,18 @@ class Debug:
         for i in args:
             tmp += str(i) + ' '
 
+        tmp1 = tmp[:-1]
+
         if type == "error":
-            self.logData["error"].append(tmp)
+            self.logData["error"].append(tmp1)
         elif type == "critical_error":
-            self.logData["critical_error"].append(tmp)
+            self.logData["critical_error"].append(tmp1)
         elif type == "warning":
-            self.logData["warning"].append(tmp)
+            self.logData["warning"].append(tmp1)
         elif type == "sys":
-            self.logData["sys"].append(tmp)
+            self.logData["sys"].append(tmp1)
         if type == "msg":
-            self.logData["msg"].append(tmp)
+            self.logData["msg"].append(tmp1)
 
 
     #  if it is needed save it whenever
@@ -256,3 +341,10 @@ if __name__ == "__main__":
     # print(D.getTmpLog())
 
     # print(D.FAIL, D.getTmpLog("sys"), D.ORDINARY)
+
+
+    # ------------------
+
+    D.error_log("error_log")
+    D.warning_log("warning_log")
+    print(D.getTmpLog())
