@@ -156,7 +156,7 @@ class Debug:
         else:
             return False
 
-    # rewrite if u'll have desire
+    # rewrite if u'll have a desire
     def error_log(self, *args, **kwargs):
         logLogTmp = self._log_log(*args, **kwargs)
         if len(logLogTmp) == 3:  # all data is here

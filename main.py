@@ -1,6 +1,4 @@
-import neuralNetworkLearning
+from neuralNetworkLearning import NeuralNetworkLearning as NNL
 
-
-# move here some code from neuralNetworkLearning
-
-# reorganize neuralNetworkLearning
+NNL1 = NNL.getInstance()
+NNL1.learning(1000, 20)
